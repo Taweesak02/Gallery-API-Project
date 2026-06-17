@@ -1,47 +1,48 @@
 const authService = require('../services/authService')
+const AppError = require('../errors/errorHandle')
 const register = async (req, res) => {
     try {
         const { username, email, password, confirmPassword } = req.body;
 
-        //check field input
+    // check field input
         if(!username || !email || !password || !confirmPassword){
-            return res.status(400).json({ message: 'missing fields input' })
+            throw new AppError("Missing fields input",400)
         }
-
+    
         //check password and confirm password
         if(password !== confirmPassword){
-            return res.status(400).json({ message: 'Password and confirm password do not match' })
+            throw new AppError("Password and confirmPassword do not matching",400)
         }
 
         const response = await authService.register(username,email,password)
         setCookie(res,response.refresh_token)
-        res.status(201).json({message:"register success",data:{
+        res.status(201).json({
+            message:"Register success",
+            data:{
                 id:response.id,
                 username:response.username,
                 email: response.email,
                 role: response.role,
                 accessToken:response.access_token
-            }})
+            }
+        })
     }
     catch (error) {
-        if(error.status){
-            res.status(error.status).json({message:"register failed",error:error.message})
-        }
-        res.status(500).json({message:"register failed",'error': error.message})
+        res.status(error.status || 500).json({message:"Register failed",error: error.message})
     }
 }
-// below later
+
 const login = async (req, res) => {
     try{
         const { email, password } = req.body;
         if(!email || !password){
-            return res.status(400).json({ message: 'missing fields input' })
+            return res.status(400).json({ message: 'Missing fields input' })
         }
 
         const response = await authService.login(email, password)
         setCookie(res,response.refresh_token)
         res.status(200).json({
-            message:"login success",
+            message:"Login success",
             data:{
                 id:response.id,
                 username:response.username,
@@ -50,10 +51,7 @@ const login = async (req, res) => {
                 accessToken:response.access_token
             }})
     }catch (error) {
-        if(error.status === 401){
-            return res.status(401).json({ message: error.message })
-        }
-        res.status(500).json({message:"login failed",error: error.message})
+        res.status(error.status || 500).json({message:"Login failed",error: error.message})
     }   
 }
 // read refreshtoken to get new accesstoken
@@ -61,10 +59,18 @@ const refresh = async(req,res)=>{
     try{
         const userData = req.userData
         const response = await authService.refresh(userData)
-        setCookie(res,response.newRefreshToken)
-        res.status(200).json({message:"refresh success",accessToken:response.newAccessToken})
+        setCookie(res,response.refresh_token)
+        res.status(200).json({
+            message:"Refresh success",
+            data:{
+                id:response.id,
+                username:response.username,
+                email: response.email,
+                role: response.role,
+                accessToken:response.access_token
+            }})
     }catch(error) {  
-        res.status(500).json({message:"refresh failed",error:error.message})
+        res.status(error.status || 500).json({message:"Refresh failed",error:error.message})
     }
 }
 
@@ -74,17 +80,34 @@ const logout = async(req,res)=>{
         const userData = req.userData
         const response = await authService.logout(userData)
         res.clearCookie("refreshToken")
-        res.status(200).json({message:"logout success",data:response})
+        res.status(200).json({message:"Logout success"})
     }catch(error) {
-        res.status(500).json({message:"logout failed",error:error.message})
+        res.status(error.status || 500).json({message:"Logout failed",error:error.message})
+    }
+}
+
+const deleteUser = async(req,res)=>{
+    try{
+        const userData = req.userData
+        const response = await authService.deleteUser(userData)
+        res.clearCookie("refreshToken")
+        res.status(200).json({message:"Delete user success",
+            data:{
+                id:response.id,
+                username:response.username,
+                email: response.email,
+                role: response.role
+            }
+        })
+    }catch(error){
+        res.status(error.status || 500).json({message:"Delete user failed",error:error.message})
     }
 }
 
 const getme = async(req,res)=>{
     try{
         const userData = req.userData
-        // const userData = await authService.getme(userData)
-        res.status(200).json({message:"getme success",data:{
+        res.status(200).json({message:"Getme success",data:{
                 id:userData.id,
                 username:userData.username,
                 email: userData.email,
@@ -93,7 +116,7 @@ const getme = async(req,res)=>{
                 updateAt:userData.updated_at
             }})
     }catch(error){
-        res.status(500).json({message:"getme failed",error:error.message})
+        res.status(error.status || 500).json({message:"Getme failed",error:error.message})
     }
 }
 
@@ -114,5 +137,6 @@ module.exports = {
     login,
     refresh,
     logout,
+    deleteUser,
     getme
 }

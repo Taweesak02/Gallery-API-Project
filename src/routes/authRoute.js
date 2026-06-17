@@ -11,6 +11,8 @@ app.post('/refresh',tokenCheck.refreshTokenCheck, authController.refresh)
 
 app.post('/logout',tokenCheck.refreshTokenCheck,authController.logout)
 
+app.delete('/delete',tokenCheck.refreshTokenCheck,authController.deleteUser)// no this one
+
 app.get('/getme',tokenCheck.accessTokenCheck, authController.getme)
 
 module.exports = app

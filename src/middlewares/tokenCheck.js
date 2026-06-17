@@ -28,26 +28,57 @@ const refreshTokenCheck = async (req,res,next) =>{
     }
 }
 
-const accessTokenCheck = async (req,res,next)=>{
-    try{
+// const accessTokenCheck = async (req,res,next)=>{
+//     try{
+//         const authHeader = req.headers['authorization']
+//         if(!authHeader){
+//             return res.status(401).json({message:'no token provide'})
+//         }
+
+//         const accessToken = authHeader.split(' ')[1]
+//         const decoded = jwtService.verifyToken(accessToken)
+
+//         if(!decoded ){
+//             return res.status(401).json({ message: 'access token not correct'})
+//         }
+
+//         const userData = await userRepo.getData(decoded.sub)
+       
+//         req.userData = userData
+//         next();
+//     }catch(error){
+//         res.status(500).json({message:"accessTokenCheck failed",error:error.message})
+//     }
+// }
+
+const accessTokenCheck = async (req, res, next) => {
+    try {
         const authHeader = req.headers['authorization']
-        if(!authHeader){
-            return res.status(401).json({message:'no token provide'})
+
+        // ── No access token → fall back to refresh token check ──
+        if (!authHeader) {
+            return refreshTokenCheck(req, res, next)
         }
 
-        const accessToken = authHeader && authHeader.split(' ')[1]
+        const accessToken = authHeader.split(' ')[1]
+
+        // ── Invalid/missing bearer value → fall back to refresh token check ──
+        if (!accessToken) {
+            return refreshTokenCheck(req, res, next)
+        }
+
         const decoded = jwtService.verifyToken(accessToken)
 
-        if(!decoded ){
-            return res.status(401).json({ message: 'access token not correct'})
+        // ── Expired/invalid access token → fall back to refresh token check ──
+        if (!decoded) {
+            return refreshTokenCheck(req, res, next)
         }
 
         const userData = await userRepo.getData(decoded.sub)
-       
         req.userData = userData
         next();
-    }catch(error){
-        res.status(500).json({message:"accessTokenCheck failed",error:error.message})
+    } catch (error) {
+        res.status(500).json({ message: "accessTokenCheck failed", error: error.message })
     }
 }
 

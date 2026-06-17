@@ -5,52 +5,51 @@ const AppError = require('../errors/errorHandle')
 const bcrypt = require('bcrypt')
 
 const register = async (username,email, password)=>{
-    const hashedPassword = bcrypt.hashSync(password, 10)
+    
     // add user
-    try{
-        const userId = await userRepo.addUser(username,email,hashedPassword)
-
-        const userDataNoToken = await userRepo.getData(userId.id)
-        // genarate new token
-        const accessToken = jwtService.generateAccessToken(userDataNoToken)
-        const refreshToken = jwtService.generateRefreshToken(userDataNoToken)
-        await userRepo.updateRefreshToken(refreshToken,userDataNoToken.id)
-        //finish data
-        const userData = await userRepo.getData(userDataNoToken.id)
-        return {...userData,access_token:accessToken}
-    }catch(error){
+    const hashedPassword = bcrypt.hashSync(password, 10)
+    const userDataNoToken = await userRepo.addUser(username,email,hashedPassword)
+    if(!userDataNoToken){
         throw new AppError("There are already have this user",409)
     }
+    
+    // genarate new token
+    const accessToken = jwtService.generateAccessToken(userDataNoToken)
+    const refreshToken = jwtService.generateRefreshToken(userDataNoToken)
+    const userData = await userRepo.updateRefreshToken(refreshToken,userDataNoToken.id)
+ 
+    return {...userData,access_token:accessToken}
+
 }
 
 const login = async (email, password) => {
+
     // checking if user exist in database
     const oldUserData = await userRepo.findByEmail(email)
     
     if(!oldUserData){
-        throw {status: 401, message: 'Invalid email or password'}
+        throw new AppError("Invalid email or password",401)
     }
     // check matching password
     const isPasswordValid = bcrypt.compareSync(password, oldUserData.password)
     if(!isPasswordValid){
-        throw {status: 401, message: 'Invalid email or password'}
+         throw new AppError("Invalid email or password",401)
     }
     //create new token
     const accessToken = jwtService.generateAccessToken(oldUserData)
     const refreshToken = jwtService.generateRefreshToken(oldUserData)
     await blacklisttokenRepo.addBlackListToken(oldUserData.refresh_token)
-    await userRepo.updateRefreshToken(refreshToken,oldUserData.id)
-    //get current userData
-    const userData = await userRepo.getData(oldUserData.id)
+    const userData = await userRepo.updateRefreshToken(refreshToken,oldUserData.id)
+    
    return {...userData,access_token:accessToken}
 }
 
 const refresh = async (userData)=>{
     await blacklisttokenRepo.addBlackListToken(userData.refresh_token)
-    const newRefreshToken = jwtService.generateRefreshToken(userData)
-    const newAccessToken = jwtService.generateAccessToken(userData)
-    await userRepo.updateRefreshToken(newRefreshToken,userData.id)
-    return {newAccessToken,newRefreshToken}
+    const refreshToken = jwtService.generateRefreshToken(userData)
+    const accessToken = jwtService.generateAccessToken(userData)
+    const newUserData = await userRepo.updateRefreshToken(refreshToken,userData.id)
+    return {...newUserData,access_token:accessToken}
 }
 
 const logout = async (userData)=>{
@@ -60,10 +59,16 @@ const logout = async (userData)=>{
     await userRepo.updateRefreshToken(newRefreshToken,userData.id)
 }
 
+const deleteUser = async(userData)=>{
+    const deletedUserData = await userRepo.deleteUser(userData.id)
+    return deletedUserData
+
+}
 
 module.exports = {
     register,
     login,
     refresh,
-    logout
+    logout,
+    deleteUser
 }

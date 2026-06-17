@@ -1,21 +1,20 @@
 const artistRepo = require('../repository/artistRepo')
+const AppError = require('../errors/errorHandle')
 
 const register = async (userId,name)=> {
-    try{
-         //add artist
-        const response = await artistRepo.addArtist(userId,name)
-        return response
-    }catch(error){
-        
-        throw {status:409,message:"There are already have this artist"}
+    //add artist
+    const response = await artistRepo.addArtist(userId,name)
+    if(!response){
+        throw new AppError("There are already have this artist",409)
     }
+    return response
 }
 
 const deleteArtist = async(userData)=>{
 
     const response = await artistRepo.deleteArtist(userData.id)
     if(!response){
-        throw {status: 404, message: 'There are no this artist'}
+        throw new AppError('There are no this artist',404)
     }
    
 }
@@ -23,7 +22,7 @@ const deleteArtist = async(userData)=>{
 const editArtist = async(userData,artistData)=>{
     const response = await artistRepo.editArtist(userData.id,artistData)
     if(!response){
-        throw {status: 404, message: 'Artist Not Found'}
+        throw new AppError('Artist Not Found',404)
     }
     return response
 }
@@ -32,7 +31,7 @@ const editArtist = async(userData,artistData)=>{
 const getProfile = async (id)=>{
     const response = await artistRepo.findByID(id)
     if(!response){
-        throw {status: 404, message: 'Artist Not Found'}
+         throw new AppError('Artist Not Found',404)
     }
     return response
 }

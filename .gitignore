@@ -56,4 +56,4 @@ temp/
 # TypeScript
 *.tsbuildinfo
 
-.upload
+upload/
