@@ -1,0 +1,238 @@
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          example: user@gmail.com
+        password:
+          type: string
+          example: "123456"
+    LoginResponse:
+      success:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Login success
+          data:
+            $ref: '#/components/responses/DataResponse'
+      failed_401:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Login failed
+          error:
+            type: string
+            example: Invalid email or password
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Login failed
+          error:
+            type: string
+            example: Error message
+
+    RegisterRequest:
+      type: object
+      required: [username, email, password, confirmPassword]
+      properties:
+        username:
+          type: string
+          example: username
+        email:
+          type: string
+          example: user@gmail.com
+        password:
+          type: string
+          example: "123456"
+        confirmPassword:
+          type: string
+          example: "123456"
+    RegisterResponse:
+      success:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Register success
+            data:
+              $ref: '#/components/responses/DataResponse'
+      failed_409:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Register failed
+          error:
+            type: string
+            example:  There are already have this user
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Register failed
+          error:
+            type: string
+            example: Error message
+
+    RefreshResponse:
+      success: 
+        type: object
+        properties:
+          message:
+            type: string
+            example: Refresh success
+          data:
+            $ref: '#/components/responses/DataResponse'
+      failed_401:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Refresh failed
+          error:
+            type: string
+            example: no token provide
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Refresh failed
+          error:
+            type: string
+            example: Error message
+
+    LogoutResponse:
+      success:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Logout success
+      failed_401:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Logout failed
+          error:
+            type: string
+            example: no token provide
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Logout failed
+          error:
+            type: string
+            example: Error message
+
+    DeleteResponse:
+      success:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Delete success
+      failed_401:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Delete failed
+          error:
+            type: string
+            example: no token provide
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Delete failed
+          error:
+            type: string
+            example: Error message
+
+    GetmeResponse:
+      success:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Getme success
+          data:
+            $ref: '#/components/responses/DataResponse'
+      failed_401:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Getme failed
+          error:
+            type: string
+            example: no token provide
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Getme failed
+          error:
+            type: string
+            example: Error message
+      
+    UpdateRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+          example: username
+        email:
+          type: string
+          example: user@gmail.com
+        password:
+          type: string
+          example: "123456"
+    UpdateResponse:
+      success:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Update success
+          data:
+            $ref: '#/components/responses/DataResponse'
+      failed_401:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Update failed
+          error:
+            type: string
+            example: no token provide
+      failed_500:
+        type: object
+        properties:
+          message:
+            type: string
+            example: Update failed
+          error:
+            type: string
+            example: Error message
+      
+            
+        
+
+    
+ 

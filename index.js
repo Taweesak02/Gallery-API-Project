@@ -6,6 +6,7 @@ const authRoute = require('./src/routes/authRoute')
 const artistRoute = require('./src/routes/artistRoute')
 const galleryRoute = require('./src/routes/galleryRoute')
 require('dotenv').config()
+const {swaggerUi,swaggerSpec} = require('./src/configs/swaggerConfig')
 
 const port = process.env.APP_PORT || 3000
 
@@ -23,6 +24,8 @@ start()
 
 app.use(cookieParser())
 app.use(express.json())
+//swagger
+app.use('/docs',swaggerUi.serve,swaggerUi.setup(swaggerSpec))
 
 //route
 app.use('/v1/auth', authRoute)
@@ -32,6 +35,7 @@ app.use('/v1/gallery',galleryRoute)
 app.get('/', (req, res) => {
   res.status(200).json({message:'Welcome to the Gallery API'})
 })
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)

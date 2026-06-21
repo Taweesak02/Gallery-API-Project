@@ -1,4 +1,4 @@
-const pool = require("../db/db")
+const pool = require("../configs/dbConfig")
 
 const addBlackListToken = async (refreshToken)=>{
     try{

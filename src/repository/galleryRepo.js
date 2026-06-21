@@ -1,4 +1,4 @@
-const pool = require('../db/db')
+const pool = require('../configs/dbConfig')
 
 const addArtwork = async(artistId,title,imagePath)=>{
     const result = await pool.query(
@@ -12,15 +12,15 @@ const addArtwork = async(artistId,title,imagePath)=>{
 const getArtwork = async(searchQuery)=>{
     let setvaraiable = []
 
-    if(searchQuery.title !== undefined){
+    if(searchQuery.title){
         setvaraiable.push(`title LIKE '%${searchQuery.title}%'`)
     }
 
-    if(searchQuery.artist_id !== undefined){
+    if(searchQuery.artist_id){
         setvaraiable.push(`artist_id = ${searchQuery.artist_id}`)
     }
 
-    if(searchQuery.create_date !== undefined){
+    if(searchQuery.create_date){
         setvaraiable.push(`created_at LIKE '%${searchQuery.create_date}%'`)
     }
 
@@ -39,6 +39,13 @@ const getArtworkById = async(id)=>{
         `select * from gallerys where id = ${id}`
     )
     return result.rows[0] || null
+}
+
+const getArtworkPathByArtistId = async (artistId)=>{
+    const result = await pool.query(
+        `Select image_path from gallerys where artist_id = ${artistId}`
+    )
+    return result.rows || null
 }
 
 const editArtwork = async(artistId,artworkId,editData,image_path)=>{
@@ -72,6 +79,7 @@ const deleteArtwork = async(artistId,artworkId)=>{
 module.exports = {
     addArtwork,
     getArtwork,
+    getArtworkPathByArtistId,
     getArtworkById,
     editArtwork,
     deleteArtwork

@@ -4,7 +4,7 @@ const addArtwork = async (req,res) => {
     try{
         const userId = req.userData.id
         const title = req.body.title
-        const imagePath = req.file.path
+        const imagePath = req.file?.filename ? `/image/${req.file.filename}` :null
         const response = await galleryService.addArtwork(userId,title,imagePath)
         res.status(201).json({message:"Add artwork success",data:response})
     }catch(error){
@@ -37,8 +37,7 @@ const editArtwork = async(req,res)=>{
         const userId = req.userData.id
         const artworkId = req.params.id
         const editData = req.body
-        const imagePath = req.file?.path || null
-        
+        const imagePath = `/image/${req.file?.filename}` || null
         const response = await galleryService.editArtwork(userId,artworkId,editData,imagePath)
         res.status(200).json({message:"Edit artwork success",data:response})
     }catch(error){

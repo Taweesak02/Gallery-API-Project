@@ -1,4 +1,4 @@
-const pool = require('../db/db')
+const pool = require('../configs/dbConfig')
 
 const addUser = async (username,email,password)=>{
     try{
@@ -11,13 +11,38 @@ const addUser = async (username,email,password)=>{
         return null
     }
 }
-
+//old
 const updateRefreshToken = async (refresh_token,id)=>{
     const result = await pool.query(
-         `UPDATE users SET refresh_token = $1 WHERE id = $2 returning *`,
+         `UPDATE users SET refresh_token = $1,updated_at = CURRENT_TIMESTAMP  WHERE id = $2 returning *`,
         [refresh_token,id]
     )
     return result.rows[0]
+}
+
+const updateRole = async(role,id)=>{
+    const result = await pool.query(
+        `UPDATE users SET role = $1,updated_at = CURRENT_TIMESTAMP WHERE id = $2`,
+        [role,id]
+    )
+}
+///
+///new
+const updateData = async(id,editData)=>{
+    try{
+        const result = await pool.query(
+        `UPDATE users
+        SET ${editData.join(",")},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}  
+        RETURNING *`
+        )
+        return result.rows[0]
+    }catch(error){
+        return null
+    }
+    
+    
 }
 
 const getData = async (id)=>{
@@ -56,6 +81,8 @@ module.exports = {
     addUser,
     getData,
     updateRefreshToken,
+    updateRole,
+    updateData,
     findByEmail,
     findByRefreshToken,
     deleteUser

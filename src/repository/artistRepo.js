@@ -1,4 +1,4 @@
-const pool = require('../db/db')
+const pool = require('../configs/dbConfig')
 
 const addArtist = async(userId,name)=>{
     try{
@@ -14,34 +14,17 @@ const addArtist = async(userId,name)=>{
 
 const deleteArtist = async(id)=>{
     const result = await pool.query(
-        `delete from artists where user_id = $1 returning id`,
+        `delete from artists where user_id = $1 returning *`,
         [id]
     )
     return result.rows[0]
 }
 
-const editArtist = async(id,artistData)=>{
-    let setvaraiable = []
-
-    if(artistData.name){
-        setvaraiable.push(`name = '${artistData.name}'`)
-    }
-    if(artistData.sex){
-        setvaraiable.push(`sex = '${artistData.sex}'`)
-    }
-    if(artistData.birth_date !== undefined){
-        setvaraiable.push(`birth_date = '${artistData.birth_date}'`)
-    }
-    if(artistData.nationality !== undefined){
-        setvaraiable.push(`nationality = '${artistData.nationality}'`)
-    }
-    if(artistData.profile_image !== undefined){
-        setvaraiable.push(`profile_image = '${artistData.profile_image}'`)
-    }
+const editArtist = async(id,editData)=>{
 
     const result = await pool.query(
         `UPDATE artists
-        SET ${setvaraiable.join(",")}
+        SET ${editData.join(",")}
         WHERE user_id = ${id}  
         RETURNING *`,
     )

@@ -1,0 +1,233 @@
+/v1/auth/login:
+  post:
+    tags: [Authentication]
+    summary: Login User
+    description: Login user from Database
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginRequest'
+    responses:
+      200:
+        description: Login success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginResponse/success'
+      401:
+        description: Invalid email or password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginResponse/failed_401'
+      500:
+        description: Login failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginResponse/failed_500'
+
+/v1/auth/register:
+  post:
+    tags: [Authentication]
+    summary: Register User
+    description: Register new user to Database
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterRequest'
+    responses:
+      201:
+        description: Register success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterResponse/success'
+      409:
+        description: User already exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterResponse/failed_409'
+      500:
+        description: Register failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterResponse/failed_500'
+
+/v1/auth/refresh:
+  post:
+    tags: [Authentication]
+    summary: Refresh 
+    description: get new access token
+    security: []
+    responses:
+      200:
+        description: Refresh success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshResponse/success'
+      401:
+        description: Refresh failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshResponse/failed_401'
+      500:
+        description: Refresh failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshResponse/failed_500'
+
+/v1/auth/logout:
+  post:
+    tags: [Authentication]
+    summary: Logout User
+    description: Logout User deactive lastest refresh token
+    responses:
+      200:
+        description: Logout success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutResponse/success'
+      401:
+        description: Logout failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutResponse/failed_401'        
+      500:
+        description: Logout failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutResponse/failed_500'
+
+/v1/auth/delete:
+  delete:
+    tags: [Authentication]
+    summary: Delete user
+    description: Delete user from database
+    responses:
+      200:
+        description: Delete success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteResponse/success'
+      401:
+        description: Delete failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteResponse/failed_401'
+      500:
+        description: Delete failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteResponse/failed_500'
+    
+/v1/auth/getme:
+  get:
+    tags: [Authentication]
+    summary: Getme
+    description: Get Current User
+    responses:
+      200:
+        description: Getme success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetmeResponse/success'
+      401:
+        description: Delete failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetmeResponse/failed_401'
+      500:
+        description: Getme failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetmeResponse/failed_500'
+
+/v1/auth/update:
+  patch:
+    tags: [Authentication]
+    summary: Update user
+    description: Update own user data
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateRequest'
+    responses:
+      200:
+        description: Update success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResponse/success'
+      401:
+        description: Update failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResponse/failed_401'
+      500:
+        description: Update failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResponse/failed_500'
+
+/v1/auth/update/{userId}:
+  patch:
+    tags: [Authentication]
+    summary: Update user by Id
+    description: Update other user data
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The numeric ID of the user to retrieve.
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateRequest'
+    responses:
+      200:
+        description: Update success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResponse/success'
+      401:
+        description: Update failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResponse/failed_401'
+      500:
+        description: Update failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResponse/failed_500'

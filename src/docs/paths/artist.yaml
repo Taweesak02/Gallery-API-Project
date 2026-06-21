@@ -1,0 +1,124 @@
+/v1/artist/register:
+  post:
+    tags: [Artist]
+    summary: Register Artist
+    description: Register new artist to Database
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/RegisterArtistRequest'
+    responses:
+      201:
+        description: Register success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterArtistResponse/success'
+      401:
+        description: Register failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/RegisterArtistResponse/failed_401'
+      500:
+        description: Register failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/RegisterArtistResponse/failed_500'
+
+/v1/artist/delete:
+  delete:
+    tags: [Artist]
+    summary: Delete Artist
+    description: Delete artist from Database
+    responses:
+      201:
+        description: Delete success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteArtistResponse/success'
+      401:
+        description: Delete failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/DeleteArtistResponse/failed_401'
+      500:
+        description: Delete failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/DeleteArtistResponse/failed_500'
+
+/v1/artist/edit:
+  patch:
+    tags: [Artist]
+    summary: Patch Artist
+    description: Edit artist in Database
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/PatchArtistRequest'
+    responses:
+      200:
+        description: Patch success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchArtistResponse/success'
+      401:
+        description: Patch failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/PatchArtistResponse/failed_401'
+      500:
+        description: Patch failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/PatchArtistResponse/failed_500'
+
+/v1/artist/{userId}:
+  patch:
+    tags: [Artist]
+    summary: Patch Artist By Id
+    description: Edit other artist in Database
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The numeric ID of the user to retrieve.
+        schema:
+          type: integer
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/PatchArtistRequest'
+    responses:
+      200:
+        description: Patch success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchArtistResponse/success'
+      401:
+        description: Patch failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/PatchArtistResponse/failed_401'
+      500:
+        description: Patch failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/PatchArtistResponse/failed_500'

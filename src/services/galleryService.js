@@ -1,13 +1,20 @@
 const artistRepo = require('../repository/artistRepo')
 const galleryRepo = require('../repository/galleryRepo')
 const AppError = require('../errors/errorHandle')
-const fs = require('fs').promises
+const imageService = require('./imageService')
 
 const addArtwork =  async (userId,title,imagePath)=>{
+    if(!imagePath){
+        throw new AppError("Missing image file",400)
+    }
     const artistData = await artistRepo.findByUserId(userId)
-   
     if(!artistData){
-        throw {status:404,message:"Artist Not Found"}
+        if(imagePath){
+            await imageService.deleteImages([imagePath])
+        }
+            
+        throw new AppError("Artist Not Found",404)
+        
     }
     const response = await galleryRepo.addArtwork(artistData.id,title,imagePath)
     return response
@@ -32,9 +39,9 @@ const editArtwork = async(userId,artworkId,editData,imagePath)=>{
         throw new AppError("No Data to Edit",400)
     }
 
-    if (imagePath !== null){
+    if (imagePath){
         const artworkData = await galleryRepo.getArtworkById(artworkId)
-        fs.unlink(artworkData.image_path)
+        await imageService.deleteImages([artworkData.image_path])
     }
 
     const artistData = await artistRepo.findByUserId(userId)
@@ -45,7 +52,7 @@ const editArtwork = async(userId,artworkId,editData,imagePath)=>{
 const deleteArtwork = async(userId,artworkId)=>{
     const artistData = await artistRepo.findByUserId(userId)
     const response = await galleryRepo.deleteArtwork(artistData.id,artworkId)
-    await fs.unlink(response.image_path)
+    await imageService.deleteImages([response.image_path])
     if(!response){
         throw new AppError('artwork not found',404)
     }

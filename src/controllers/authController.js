@@ -108,15 +108,57 @@ const getme = async(req,res)=>{
     try{
         const userData = req.userData
         res.status(200).json({message:"Getme success",data:{
-                id:userData.id,
-                username:userData.username,
-                email: userData.email,
-                role: userData.role,
-                createAt:userData.created_at,
-                updateAt:userData.updated_at
-            }})
+            id:userData.id,
+            username:userData.username,
+            email: userData.email,
+            role: userData.role,
+            createAt:userData.created_at,
+            updateAt:userData.updated_at
+        }})
     }catch(error){
         res.status(error.status || 500).json({message:"Getme failed",error:error.message})
+    }
+}
+
+const updateProfile = async(req,res)=>{
+    try{
+        const userData = req.userData
+        const {username,email,password} = req.body
+        const response = await authService.updateUser(userData.id,username,email,password)
+        res.status(200).json({message:"Update profile success",data:{
+            id:response.id,
+            username:response.username,
+            email: response.email,
+            role: response.role,
+            createAt:response.created_at,
+            updateAt:response.updated_at
+        }})
+    }catch(error){
+        res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
+    }
+}
+
+const updateProfileById = async(req,res)=>{
+    try{
+        const userData = req.userData
+        const targetId = req.params.id
+        const {username,email,password} = req.body
+        let response
+        if((targetId && userData.role == 'admin') || targetId == userData.id){
+            response = await authService.updateUser(targetId,username,email,password)
+        }else{
+            return res.status(401).json({message:"Update profile failed",error:"You are not allow to update other user"})
+        }
+        res.status(200).json({message:"Update profile success",data:{
+            id:response.id,
+            username:response.username,
+            email: response.email,
+            role: response.role,
+            createAt:response.created_at,
+            updateAt:response.updated_at
+        }})
+    }catch(error){
+        res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
     }
 }
 
@@ -138,5 +180,7 @@ module.exports = {
     refresh,
     logout,
     deleteUser,
-    getme
+    getme,
+    updateProfile,
+    updateProfileById
 }

@@ -9,10 +9,14 @@ app.post('/register', authController.register)
 
 app.post('/refresh',tokenCheck.refreshTokenCheck, authController.refresh)
 
-app.post('/logout',tokenCheck.refreshTokenCheck,authController.logout)
+app.post('/logout',tokenCheck.accessTokenCheck,authController.logout)
 
-app.delete('/delete',tokenCheck.refreshTokenCheck,authController.deleteUser)// no this one
+app.delete('/delete',tokenCheck.accessTokenCheck,authController.deleteUser)// no this one
 
 app.get('/getme',tokenCheck.accessTokenCheck, authController.getme)
+
+app.patch('/update/:id',tokenCheck.accessTokenCheck,authController.updateProfileById)
+
+app.patch('/update',tokenCheck.accessTokenCheck,authController.updateProfile)
 
 module.exports = app

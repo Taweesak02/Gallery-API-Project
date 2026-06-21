@@ -1,4 +1,4 @@
-const pool = require('./db')
+const pool = require('../configs/dbConfig')
 
 async function initDB() {
     const client = await pool.connect()
@@ -50,7 +50,7 @@ async function initDB() {
                 id SERIAL PRIMARY KEY,
                 artist_id INT NOT NULL,
                 title VARCHAR(255) not null default 'untitled',
-                image_path text default 'unknown',
+                image_path text not null,
                 created_at TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 constraint fk_user

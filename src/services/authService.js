@@ -1,8 +1,10 @@
 const userRepo = require('../repository/userRepo')
+const artistService = require('../services/artistService')
 const jwtService = require('./jwtService')
 const blacklisttokenRepo = require('../repository/blackListTokenRepo')
 const AppError = require('../errors/errorHandle')
 const bcrypt = require('bcrypt')
+const { deleteArtist } = require('../repository/artistRepo')
 
 const register = async (username,email, password)=>{
     
@@ -60,9 +62,29 @@ const logout = async (userData)=>{
 }
 
 const deleteUser = async(userData)=>{
+    await artistService.deleteArtist(userData)
     const deletedUserData = await userRepo.deleteUser(userData.id)
     return deletedUserData
 
+}
+
+const updateUser = async(userId,username,email,password)=>{
+    const editData = []
+    if(username){
+        editData.push(`username = '${username}'`)
+    }
+    if(email){
+        editData.push(`email = '${email}'`)
+    }
+    if(password){
+        const hashedPassword = bcrypt.hashSync(password, 10)
+        editData.push(`password = '${hashedPassword}'`)
+    }
+    const response =  await userRepo.updateData(userId,editData)
+    if(!response){
+        throw new AppError("Duplicate value",409)
+    }
+    return response
 }
 
 module.exports = {
@@ -70,5 +92,6 @@ module.exports = {
     login,
     refresh,
     logout,
-    deleteUser
+    deleteUser,
+    updateUser
 }
