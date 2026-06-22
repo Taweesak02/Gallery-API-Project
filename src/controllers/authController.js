@@ -1,30 +1,33 @@
 const authService = require('../services/authService')
-const AppError = require('../errors/errorHandle')
+const {userWithAccessResponse,deleteUserResponse,fullUserResponse} = require('../models/userResponse')
+
 const register = async (req, res) => {
     try {
-        const { username, email, password, confirmPassword } = req.body;
+        const { username, email, password, confirmPassword } = req.body
 
-    // check field input
+        // check field input
         if(!username || !email || !password || !confirmPassword){
-            throw new AppError("Missing fields input",400)
-        }
-    
-        //check password and confirm password
-        if(password !== confirmPassword){
-            throw new AppError("Password and confirmPassword do not matching",400)
+            let missingfield = []
+            if(!username){
+                missingfield.push('username')
+            }
+            if(!email){
+                missingfield.push('email')
+            }
+            if(!password){
+                missingfield.push('password')
+            }
+            if(!confirmPassword){
+                missingfield.push('confirmPassword')
+            }
+            return res.status(400).json({message:'Missing fields input ' + missingfield.join(',')})
         }
 
-        const response = await authService.register(username,email,password)
+        const response = await authService.register(username,email,password,confirmPassword)
         setCookie(res,response.refresh_token)
         res.status(201).json({
             message:"Register success",
-            data:{
-                id:response.id,
-                username:response.username,
-                email: response.email,
-                role: response.role,
-                accessToken:response.access_token
-            }
+            data: userWithAccessResponse(response)
         })
     }
     catch (error) {
@@ -34,22 +37,26 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try{
-        const { email, password } = req.body;
+        const { email, password } = req.body
+
+        //check field
         if(!email || !password){
-            return res.status(400).json({ message: 'Missing fields input' })
+            let missingfield = []
+            if(!email){
+                missingfield.push('email')
+            }
+            if(!password){
+                missingfield.push('password')
+            }
+            return res.status(400).json({ message: 'Missing fields input' + missingfield.join(',')})
         }
 
         const response = await authService.login(email, password)
         setCookie(res,response.refresh_token)
         res.status(200).json({
             message:"Login success",
-            data:{
-                id:response.id,
-                username:response.username,
-                email: response.email,
-                role: response.role,
-                accessToken:response.access_token
-            }})
+            data: userWithAccessResponse(response)
+        })
     }catch (error) {
         res.status(error.status || 500).json({message:"Login failed",error: error.message})
     }   
@@ -62,19 +69,13 @@ const refresh = async(req,res)=>{
         setCookie(res,response.refresh_token)
         res.status(200).json({
             message:"Refresh success",
-            data:{
-                id:response.id,
-                username:response.username,
-                email: response.email,
-                role: response.role,
-                accessToken:response.access_token
-            }})
+            data: userWithAccessResponse(response)
+        })
     }catch(error) {  
         res.status(error.status || 500).json({message:"Refresh failed",error:error.message})
     }
 }
 
-//
 const logout = async(req,res)=>{
     try{
         const userData = req.userData
@@ -91,13 +92,9 @@ const deleteUser = async(req,res)=>{
         const userData = req.userData
         const response = await authService.deleteUser(userData)
         res.clearCookie("refreshToken")
-        res.status(200).json({message:"Delete user success",
-            data:{
-                id:response.id,
-                username:response.username,
-                email: response.email,
-                role: response.role
-            }
+        res.status(200).json({
+            message:"Delete user success",
+            data: deleteUserResponse(response)
         })
     }catch(error){
         res.status(error.status || 500).json({message:"Delete user failed",error:error.message})
@@ -107,14 +104,10 @@ const deleteUser = async(req,res)=>{
 const getme = async(req,res)=>{
     try{
         const userData = req.userData
-        res.status(200).json({message:"Getme success",data:{
-            id:userData.id,
-            username:userData.username,
-            email: userData.email,
-            role: userData.role,
-            createAt:userData.created_at,
-            updateAt:userData.updated_at
-        }})
+        res.status(200).json({
+            message:"Getme success",
+            data:fullUserResponse(userData)
+        })
     }catch(error){
         res.status(error.status || 500).json({message:"Getme failed",error:error.message})
     }
@@ -125,38 +118,32 @@ const updateProfile = async(req,res)=>{
         const userData = req.userData
         const {username,email,password} = req.body
         const response = await authService.updateUser(userData.id,username,email,password)
-        res.status(200).json({message:"Update profile success",data:{
-            id:response.id,
-            username:response.username,
-            email: response.email,
-            role: response.role,
-            createAt:response.created_at,
-            updateAt:response.updated_at
-        }})
+        res.status(200).json({
+            message:"Update profile success",
+            data:fullUserResponse(response)
+        })
     }catch(error){
         res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
     }
 }
 
+//update other data for admin only or edit yourself id
 const updateProfileById = async(req,res)=>{
     try{
         const userData = req.userData
         const targetId = req.params.id
         const {username,email,password} = req.body
-        let response
-        if((targetId && userData.role == 'admin') || targetId == userData.id){
-            response = await authService.updateUser(targetId,username,email,password)
-        }else{
+       
+        //checking is admin or is own id
+        if(!((targetId && userData.role == 'admin') || targetId == userData.id)){
             return res.status(401).json({message:"Update profile failed",error:"You are not allow to update other user"})
         }
-        res.status(200).json({message:"Update profile success",data:{
-            id:response.id,
-            username:response.username,
-            email: response.email,
-            role: response.role,
-            createAt:response.created_at,
-            updateAt:response.updated_at
-        }})
+        
+        const response = await authService.updateUser(targetId,username,email,password)
+        res.status(200).json({
+            message:"Update profile success",
+            data:fullUserResponse(response)
+        })
     }catch(error){
         res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
     }

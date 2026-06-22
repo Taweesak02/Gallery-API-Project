@@ -8,8 +8,8 @@ app.post('/register',authCheck.accessTokenCheck ,upload.single('image'),artistCo
 
 app.delete('/delete',authCheck.accessTokenCheck,artistController.deleteArtist)
 
-app.patch('/edit',authCheck.accessTokenCheck,upload.single('image'),artistController.editArtist)
+app.patch('/update',authCheck.accessTokenCheck,upload.single('image'),artistController.updateArtist)
 
-app.get('/:userId',artistController.getProfile)
+app.get('/:artistId',artistController.getProfile)
 
 module.exports = app

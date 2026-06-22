@@ -24,7 +24,7 @@ const getArtwork = async(req,res)=>{
 
 const getArtworkById = async(req,res)=>{
     try{
-        const artworkId = req.params.id
+        const artworkId = req.params.artworkId
         const response = await galleryService.getArtworkById(artworkId)
         res.status(200).json({message:"Get artwork success",data:response})
     }catch(error){
@@ -35,7 +35,7 @@ const getArtworkById = async(req,res)=>{
 const editArtwork = async(req,res)=>{
     try{
         const userId = req.userData.id
-        const artworkId = req.params.id
+        const artworkId = req.params.artworkId
         const editData = req.body
         const imagePath = `/image/${req.file?.filename}` || null
         const response = await galleryService.editArtwork(userId,artworkId,editData,imagePath)
@@ -47,7 +47,7 @@ const editArtwork = async(req,res)=>{
 
 const deleteArtwork = async(req,res)=>{
     try{
-        const artworkId = req.params.id
+        const artworkId = req.params.artworkId
         const userId = req.userData.id
         const response = await galleryService.deleteArtwork(userId,artworkId)
         res.status(200).json({message:"Delete artwork success",data:response})

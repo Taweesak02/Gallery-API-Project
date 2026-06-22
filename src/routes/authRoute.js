@@ -3,15 +3,15 @@ const app = express.Router()
 const authController = require('../controllers/authController')
 const tokenCheck = require("../middlewares/tokenCheck")
 
-app.post('/login', authController.login)
-
 app.post('/register', authController.register)
+
+app.post('/login', authController.login)
 
 app.post('/refresh',tokenCheck.refreshTokenCheck, authController.refresh)
 
 app.post('/logout',tokenCheck.accessTokenCheck,authController.logout)
 
-app.delete('/delete',tokenCheck.accessTokenCheck,authController.deleteUser)// no this one
+app.delete('/delete',tokenCheck.accessTokenCheck,authController.deleteUser)
 
 app.get('/getme',tokenCheck.accessTokenCheck, authController.getme)
 

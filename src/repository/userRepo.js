@@ -11,8 +11,8 @@ const addUser = async (username,email,password)=>{
         return null
     }
 }
-//old
-const updateRefreshToken = async (refresh_token,id)=>{
+//easy to use
+const updateRefreshToken = async (id,refresh_token)=>{
     const result = await pool.query(
          `UPDATE users SET refresh_token = $1,updated_at = CURRENT_TIMESTAMP  WHERE id = $2 returning *`,
         [refresh_token,id]
@@ -20,14 +20,14 @@ const updateRefreshToken = async (refresh_token,id)=>{
     return result.rows[0]
 }
 
-const updateRole = async(role,id)=>{
+const updateRole = async(id,role)=>{
     const result = await pool.query(
         `UPDATE users SET role = $1,updated_at = CURRENT_TIMESTAMP WHERE id = $2`,
         [role,id]
     )
 }
-///
-///new
+
+//update multiple data
 const updateData = async(id,editData)=>{
     try{
         const result = await pool.query(
@@ -41,8 +41,6 @@ const updateData = async(id,editData)=>{
     }catch(error){
         return null
     }
-    
-    
 }
 
 const getData = async (id)=>{

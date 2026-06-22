@@ -8,12 +8,12 @@ app.use('/image', express.static('public/image'))
 
 app.get('/',galleryRoute.getArtwork)
 
-app.get('/:id',galleryRoute.getArtworkById)
+app.get('/:artworkId',galleryRoute.getArtworkById)
 
 app.post('/add',authCheck.accessTokenCheck,upload.single('image'),galleryRoute.addArtwork)
 
-app.patch('/edit/:id',authCheck.accessTokenCheck,upload.single('image'),galleryRoute.editArtwork)
+app.patch('/edit/:artworkId',authCheck.accessTokenCheck,upload.single('image'),galleryRoute.editArtwork)
 
-app.delete('/remove/:id',authCheck.accessTokenCheck,galleryRoute.deleteArtwork)
+app.delete('/remove/:artworkId',authCheck.accessTokenCheck,galleryRoute.deleteArtwork)
 
 module.exports = app

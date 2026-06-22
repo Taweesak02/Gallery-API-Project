@@ -4,9 +4,11 @@ const AppError = require('../errors/errorHandle')
 const imageService = require('./imageService')
 
 const addArtwork =  async (userId,title,imagePath)=>{
+    //image is require
     if(!imagePath){
-        throw new AppError("Missing image file",400)
+        throw new AppError("Image file is require",400)
     }
+    // if artist not exist delete uploaded image
     const artistData = await artistRepo.findByUserId(userId)
     if(!artistData){
         if(imagePath){

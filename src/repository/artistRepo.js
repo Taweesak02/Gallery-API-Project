@@ -20,8 +20,7 @@ const deleteArtist = async(id)=>{
     return result.rows[0]
 }
 
-const editArtist = async(id,editData)=>{
-
+const updateArtist = async(id,editData)=>{
     const result = await pool.query(
         `UPDATE artists
         SET ${editData.join(",")}
@@ -51,6 +50,6 @@ module.exports = {
     addArtist,
     findByID,
     findByUserId,
-    editArtist,
+    updateArtist,
     deleteArtist
 }

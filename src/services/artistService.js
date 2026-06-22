@@ -4,66 +4,88 @@ const userRepo = require('../repository/userRepo')
 const AppError = require('../errors/errorHandle')
 const imageService = require('./imageService')
 
-const register = async (userId,name,imagePath)=> {
+const register = async (userId,name,sex,birth_date,nationality,imagePath)=> {
     //add artist
     const response = await artistRepo.addArtist(userId,name)
     if(!response){
         throw new AppError("There are already have this artist",409)
     }
+    //update role artist to user
     await userRepo.updateRole('artist',userId)
-    let artistData
-    if(imagePath){
-        artistData = await artistRepo.editArtist(userId,[`profile_image = '${imagePath}'`])
+    //update artist data
+    if(sex || birth_date || nationality || imagePath){
+        const artistData = []
+        if(sex){
+            artistData.push(`sex = '${sex}'`)
+        }
+        if(birth_date){
+            artistData.push(`birth_date = '${birth_date}'`)
+        }
+        if(nationality){
+            artistData.push(`nationality = '${nationality}'`)
+        }
+        if(imagePath){
+            artistData.push(`profile_image = '${imagePath}'`)
+        }
+        updatedData = await artistRepo.editArtist(userId,artistData)
+
+        return updatedData
     }
-    
-    return artistData || response
+
+    return response
 }
 
-const deleteArtist = async(userData)=>{
-    const artistData = await artistRepo.findByUserId(userData.id)
+const deleteArtist = async(userId)=>{
+    const artistData = await artistRepo.findByUserId(userId)
     const allArtwork = await galleryRepo.getArtworkPathByArtistId(artistData.id)
     const imagePaths = allArtwork.map(item => item.image_path)
 
+    //delete artwork image if have it
     if(imagePaths){
         await imageService.deleteImages(imagePaths)
     }
+    //delete profile image if have it
     if(!(artistData.profile_image == 'unknown')){
         await imageService.deleteImages([artistData.profile_image])
     }
-    //delete image
-    const response = await artistRepo.deleteArtist(userData.id)
+    // delete artist account
+    const response = await artistRepo.deleteArtist(userId)
     if(!response){
         throw new AppError('There are no this artist',404)
     }
-
-    await userRepo.updateRole('user',userData.id)
+    //update role user to user
+    await userRepo.updateRole(userId,'user')
    
 }
 
-const editArtist = async(userData,editData,imagePath)=>{
-     let newEditData = []
+const updateArtist = async(userId,name,sex,birth_date,nationality,imagePath)=>{
+    // check what change
+    const editData = []
+    if(name){
+        editData.push(`name = '${editData.name}'`)
+    }
+    if(sex){
+        editData.push(`sex = '${editData.sex}'`)
+    }
+    if(birth_date){
+        editData.push(`birth_date = '${editData.birth_date}'`)
+    }
+    if(nationality){
+        editData.push(`nationality = '${editData.nationality}'`)
+    }
 
-    if(editData.name){
-        newEditData.push(`name = '${editData.name}'`)
-    }
-    if(editData.sex){
-        newEditData.push(`sex = '${editData.sex}'`)
-    }
-    if(editData.birth_date){
-        newEditData.push(`birth_date = '${editData.birth_date}'`)
-    }
-    if(editData.nationality){
-        newEditData.push(`nationality = '${editData.nationality}'`)
-    }
+    //check if image update or not
     if(imagePath){
-        const artistData = await artistRepo.findByUserId(userData.id)
+        //delete lastest image
+        const artistData = await artistRepo.findByUserId(userId)
         if(artistData){
             await imageService.deleteImages([artistData.profile_image])
         }
-        newEditData.push(`profile_image = '${imagePath}'`)
+        //push new image
+        editData.push(`profile_image = '${imagePath}'`)
     }
-    //delete image
-    const response = await artistRepo.editArtist(userData.id,newEditData)
+    
+    const response = await artistRepo.updateArtist(userId,editData)
     if(!response){
         throw new AppError('Artist Not Found',404)
     }
@@ -71,8 +93,8 @@ const editArtist = async(userData,editData,imagePath)=>{
 }
 
 
-const getProfile = async (id)=>{
-    const response = await artistRepo.findByID(id)
+const getProfile = async (artistId)=>{
+    const response = await artistRepo.findByID(artistId)
     if(!response){
          throw new AppError('Artist Not Found',404)
     }
@@ -82,6 +104,6 @@ const getProfile = async (id)=>{
 module.exports = {
     register,
     getProfile,
-    editArtist,
+    updateArtist,
     deleteArtist
 }
