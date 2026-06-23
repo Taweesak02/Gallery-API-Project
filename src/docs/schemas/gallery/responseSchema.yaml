@@ -1,0 +1,97 @@
+components:
+  schemas:
+    getArtworkResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/getArtworkMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/artworkData'
+      failed_401:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/getArtworkMessages/failed'
+          error:
+            type: string
+            example: no token provide
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/getArtworkMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    addArtworkResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/addArtworkMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/artworkData'
+      failed_400:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/addArtworkMessages/failed'
+          error:
+            type: string
+            example: Image file is require
+      failed_404:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/addArtworkMessages/failed'
+          error:
+            type: string
+            example: Artist Not Found
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/addArtworkMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    editArtworkResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/editArtworkMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/artworkData'
+      failed_400:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/editArtworkMessages/failed'
+          error:
+            type: string
+            example: No Data to Edit
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/editArtworkMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    removeArtworkResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/deleteArtworkMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/artworkData'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/deleteArtworkMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'

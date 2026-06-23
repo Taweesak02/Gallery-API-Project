@@ -1,0 +1,17 @@
+components:
+  schemas:
+    tokenCheckResponses:
+      schema:
+          type: object
+          properties:
+            message:
+              type: string
+      refreshTokenUnvalid:
+        value:
+          message: refresh token not correct
+      accessTokenUnvalid:
+        value:
+          message: access token not correct
+      noToken:
+        value:
+          message: no token provide

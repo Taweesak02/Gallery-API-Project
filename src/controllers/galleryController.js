@@ -36,9 +36,9 @@ const editArtwork = async(req,res)=>{
     try{
         const userId = req.userData.id
         const artworkId = req.params.artworkId
-        const editData = req.body
-        const imagePath = `/image/${req.file?.filename}` || null
-        const response = await galleryService.editArtwork(userId,artworkId,editData,imagePath)
+        const title = req.body.title
+        const imagePath = req.file?.filename ? `/image/${req.file.filename}` :null
+        const response = await galleryService.editArtwork(userId,artworkId,title,imagePath)
         res.status(200).json({message:"Edit artwork success",data:response})
     }catch(error){
         res.status(error.status || 500).json({message:"Edit artwork failed",error:error.message})

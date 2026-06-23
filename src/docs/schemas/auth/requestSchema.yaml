@@ -1,0 +1,43 @@
+components:
+  schemas:
+    loginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          example: user@gmail.com
+        password:
+          type: string
+          example: "123456"
+
+    registerRequest:
+      type: object
+      required: [username, email, password, confirmPassword]
+      properties:
+        username:
+          type: string
+          example: username
+        email:
+          type: string
+          example: user@gmail.com
+        password:
+          type: string
+          example: "123456"
+        confirmPassword:
+          type: string
+          example: "123456"
+
+    updateRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+          example: username
+        email:
+          type: string
+          example: user@gmail.com
+        password:
+          type: string
+          example: "123456"

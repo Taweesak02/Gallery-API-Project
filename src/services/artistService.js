@@ -11,7 +11,7 @@ const register = async (userId,name,sex,birth_date,nationality,imagePath)=> {
         throw new AppError("There are already have this artist",409)
     }
     //update role artist to user
-    await userRepo.updateRole('artist',userId)
+    await userRepo.updateRole(userId,'artist')
     //update artist data
     if(sex || birth_date || nationality || imagePath){
         const artistData = []
@@ -31,7 +31,6 @@ const register = async (userId,name,sex,birth_date,nationality,imagePath)=> {
 
         return updatedData
     }
-
     return response
 }
 

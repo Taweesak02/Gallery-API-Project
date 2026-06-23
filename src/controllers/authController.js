@@ -48,7 +48,7 @@ const login = async (req, res) => {
             if(!password){
                 missingfield.push('password')
             }
-            return res.status(400).json({ message: 'Missing fields input' + missingfield.join(',')})
+            return res.status(400).json({ message: 'Missing fields input ' + missingfield.join(',')})
         }
 
         const response = await authService.login(email, password)

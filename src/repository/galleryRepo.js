@@ -28,7 +28,7 @@ const getArtwork = async(searchQuery)=>{
         `select * from gallerys ${
             setvaraiable.length === 0
             ? ''
-            : 'Where '+ setvaraiable.join('and')
+            : 'Where '+ setvaraiable.join(' and ')
         }`
     )
     return result.rows || null
@@ -48,14 +48,13 @@ const getArtworkPathByArtistId = async (artistId)=>{
     return result.rows || null
 }
 
-const editArtwork = async(artistId,artworkId,editData,image_path)=>{
+const editArtwork = async(artistId,artworkId,title,image_path)=>{
     let setvaraiable = []
 
-    if(editData.title !== undefined){
-        setvaraiable.push(`title = '${editData.title}'`)
+    if(title){
+        setvaraiable.push(`title = '${title}'`)
     }
- 
-    if(image_path !== null){
+    if(image_path){
         setvaraiable.push(`image_path = '${image_path}'`)
     }
 

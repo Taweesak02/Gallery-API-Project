@@ -35,9 +35,9 @@ const getArtworkById = async (artworkId)=>{
     return response
 }
 
-const editArtwork = async(userId,artworkId,editData,imagePath)=>{
+const editArtwork = async(userId,artworkId,title,imagePath)=>{
 
-    if(!editData && !imagePath){
+    if(!title && !imagePath){
         throw new AppError("No Data to Edit",400)
     }
 
@@ -47,7 +47,7 @@ const editArtwork = async(userId,artworkId,editData,imagePath)=>{
     }
 
     const artistData = await artistRepo.findByUserId(userId)
-    const response = await galleryRepo.editArtwork(artistData.id,artworkId,editData,imagePath)
+    const response = await galleryRepo.editArtwork(artistData.id,artworkId,title,imagePath)
     return response
 }
 

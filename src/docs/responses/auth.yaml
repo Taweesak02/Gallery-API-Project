@@ -1,60 +1,95 @@
 components:
   responses:
-    DataResponse:
-      type: object
-      properties:
-        id:
+    messageResponses:
+      loginMessages:
+        success:
           type: string
-          example: 1
-        username:
+          example: Login success
+        failed:
           type: string
-          example: user
-        email:
+          example: Login failed
+      registerMessages:
+        success:
           type: string
-          example: user@gmail.com
-        role:
+          example: Register success
+        failed:
           type: string
-          example: user
-        accessToken:
+          example: Register failed
+      refreshMessages:
+        success:
           type: string
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          example: Refresh success
+        failed:
+          type: string
+          example: Refresh failed
+      logoutMessages:
+        success:
+          type: string
+          example: Logout success
+        failed:
+          type: string
+          example: Logout failed
+      deleteMessages:
+        success:
+          type: string
+          example: Delete success
+        failed:
+          type: string
+          example: Delete failed
+      getmeMessages:
+        success:
+          type: string
+          example: Getme success
+        failed:
+          type: string
+          example: Getme failed
+      updateMessages:
+        success:
+          type: string
+          example: Update success
+        failed:
+          type: string
+          example: Update failed
 
-    ArtistDataResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 1
-        user_id:
-          type: string
-          example: 1
-        name:
-          type: string
-          example: name
-        sex:
-          type: string
-          example: male
-        birth_date:
-          type: string
-          example: birth_date
-        nationality:
-          type: string
-          example: thai
-        profile_image:
-          type: string
-          example: image_url
-        created_at:
-          type: string
-          example: created_at_date
-        updated_at:
-          type: string
-          example: updated_at_date
+    dataResponses:
+      userDataWithAccessToken:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          username:
+            type: string
+            example: user
+          email:
+            type: string
+            example: user@gmail.com
+          role:
+            type: string
+            example: user
+          accessToken:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      userDatawithDate:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          username:
+            type: string
+            example: user
+          email:
+            type: string
+            example: user@gmail.com
+          role:
+            type: string
+            example: user
+          createAt:
+            type: string
+            example: 2026-06-21
+          updateAt:
+            type: string
+            example: 2026-06-21
 
-    ArtworkDataResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 1
-
-  
+      

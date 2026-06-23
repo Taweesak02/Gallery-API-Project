@@ -1,0 +1,56 @@
+components:
+  responses:
+    messageResponses:
+      registerArtistMessages:
+        success:
+          type: string
+          example: Register artist success
+        failed:
+          type: string
+          example: Register artist failed
+      deleteArtistMessages:
+        success:
+          type: string
+          example: Delete artist success
+        failed:
+          type: string
+          example: Delete artist failed
+      updateArtistMessages:
+        success:
+          type: string
+          example: Update artist success
+        failed:
+          type: string
+          example: Update artist failed
+
+    dataResponses:
+      artistDataResponse:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          user_id:
+            type: integer
+            example: 1
+          name:
+            type: string
+            example: name
+          sex:
+            type: string
+            example: male
+          birth_date:
+            type: string
+            example: birth_date
+          nationality:
+            type: string
+            example: thai
+          profile_image:
+            type: string
+            example: image_url
+          created_at:
+            type: string
+            example: created_at_date
+          updated_at:
+            type: string
+            example: updated_at_date

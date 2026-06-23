@@ -1,0 +1,55 @@
+components:
+  schemas:
+    registerArtistResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerArtistMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/artistDataResponse'
+      failed_409:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerArtistMessages/failed'
+          error:
+            type: string
+            example: There are already have this artist
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerArtistMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    deleteArtistResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/deleteArtistMessages/success'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/deleteArtistMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    updateArtistResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/updateArtistMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/artistDataResponse'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/updateArtistMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'

@@ -1,0 +1,34 @@
+components:
+  schemas:
+    registerArtistRequest:
+      type: object
+      required: []
+      properties:
+        name:
+          type: string
+          example: name
+        image:
+          type: string
+          format: binary
+
+    updateArtistRequest:
+      type: object
+      required: []
+      properties:
+        name:
+          type: string
+          example: name
+        sex:
+          type: string
+          example: male
+        birth_date:
+          type: string
+          example: birth_date
+        nationality:
+          type: string
+          example: thai
+        image:
+            type: string
+            format: binary
+
+

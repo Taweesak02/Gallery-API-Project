@@ -1,0 +1,58 @@
+components:
+  responses:
+    messageResponses:
+      getArtworkMessages:
+        success:
+          type: string
+          example: Get artwork success
+        failed:
+          type: string
+          example: Get artwork failed
+      addArtworkMessages:
+        success:
+          type: string
+          example: Add artwork success
+        failed:
+          type: string
+          example: Add artwork failed
+      editArtworkMessages:
+        success:
+          type: string
+          example: Edit Artwork success
+        failed:
+          type: string
+          example: Edit Artwork failed
+      deleteArtworkMessages:
+        success:
+          type: string
+          example: Delete artwork success
+        failed:
+          type: string
+          example: Delete artwork failed
+
+
+    dataResponses:
+      artworkData:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 1
+          artist_id:
+            type: integer
+            example: 1
+          title:
+            type: string
+            example: artwork
+          image_path:
+            type: string
+            example: artwork url
+          created_at:
+            type: string
+            example: artwork create date
+          updated_at:
+            type: string
+            example: artwork updated date
+      
+
+  

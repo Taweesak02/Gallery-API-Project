@@ -1,0 +1,131 @@
+components:
+  schemas:
+    loginResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/loginMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/userDataWithAccessToken'
+      failed_400:
+        type: object
+        properties:
+          message:
+            type: string
+            example: 'Missing fields input ...'
+      failed_401:
+        type: object
+        properties:
+          message:
+             $ref: '#/components/responses/messageResponses/loginMessages/failed'
+          error:
+            type: string
+            example: Invalid email or password
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/loginMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+    
+    registerResponses:
+      success:
+          type: object
+          properties:
+            message:
+              $ref: '#/components/responses/messageResponses/registerMessages/success'
+            data:
+              $ref: '#/components/responses/dataResponses/userDataWithAccessToken'
+      failed_409:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerMessages/failed'
+          error:
+            type: string
+            example:  There are already have this user
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    refreshResponses:
+      success: 
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/refreshMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/userDataWithAccessToken'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/refreshMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+    
+    logoutResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/logoutMessages/success'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/logoutMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    deleteResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/deleteMessages/success'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/deleteMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'
+
+    getmeResponses:
+        success:
+          type: object
+          properties:
+            message:
+              $ref: '#/components/responses/messageResponses/getmeMessages/success'
+            data:
+              $ref: '#/components/responses/dataResponses/userDatawithDate'
+        failed_500:
+          type: object
+          properties:
+            message:
+              $ref: '#/components/responses/messageResponses/getmeMessages/failed'
+            error:
+              $ref: '#/components/responses/errorResponses/500'
+
+    updateResponses:
+      success:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/updateMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/userDatawithDate'
+      failed_500:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/updateMessages/failed'
+          error:
+            $ref: '#/components/responses/errorResponses/500'

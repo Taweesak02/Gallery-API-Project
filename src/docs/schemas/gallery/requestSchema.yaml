@@ -1,0 +1,23 @@
+components:
+  schemas:
+    addArtworkRequest:
+      type: object
+      required: []
+      properties:
+        title:
+          type: string
+          example: title
+        image:
+            type: string
+            format: binary
+    
+    editArtworkRequest:
+      type: object
+      required: []
+      properties:
+        title:
+          type: string
+          example: title
+        image:
+            type: string
+            format: binary

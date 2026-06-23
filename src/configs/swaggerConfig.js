@@ -29,13 +29,20 @@ const options = {
     },
   },
   apis: [
-    path.join(__dirname, '../docs/paths/auth.yaml'),
-    path.join(__dirname, '../docs/paths/artist.yaml'),
-    path.join(__dirname, '../docs/paths/gallery.yaml'),
-    path.join(__dirname, '../docs/schemas/auth.yaml'),
-    path.join(__dirname, '../docs/schemas/artist.yaml'),
-    path.join(__dirname, '../docs/schemas/gallery.yaml'),
-    path.join(__dirname, '../docs/responses/auth.yaml')
+    path.join(__dirname, '../docs/paths/authPath.yaml'),
+    path.join(__dirname, '../docs/paths/artistPath.yaml'),
+    path.join(__dirname, '../docs/paths/galleryPath.yaml'),
+    path.join(__dirname, '../docs/schemas/auth/responseSchema.yaml'),
+    path.join(__dirname, '../docs/schemas/auth/requestSchema.yaml'),
+    path.join(__dirname, '../docs/schemas/artist/responseSchema.yaml'),
+    path.join(__dirname, '../docs/schemas/artist/requestSchema.yaml'),
+    path.join(__dirname, '../docs/schemas/gallery/responseSchema.yaml'),
+    path.join(__dirname, '../docs/schemas/gallery/requestSchema.yaml'),
+    path.join(__dirname, '../docs/responses/auth.yaml'),
+    path.join(__dirname, '../docs/responses/artist.yaml'),
+    path.join(__dirname, '../docs/responses/gallery.yaml'),
+    path.join(__dirname, '../docs/responses/error.yaml'),
+    path.join(__dirname, '../docs/responses/tokenCheck.yaml')
   ]
 };
 
