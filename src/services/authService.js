@@ -7,28 +7,64 @@ const bcrypt = require('bcrypt')
 const { deleteArtist } = require('../repository/artistRepo')
 
 const register = async (username,email, password,confirmPassword)=>{
+
+    // check field input
+    if(!username || !email || !password || !confirmPassword){
+        const missingfield = []
+        if(!username){
+            missingfield.push('username')
+        }
+        if(!email){
+            missingfield.push('email')
+        }
+        if(!password){
+            missingfield.push('password')
+        }
+        if(!confirmPassword){
+            missingfield.push('confirmPassword')
+        }
+        throw new AppError('Missing fields input ' + missingfield.join(','),400)
+    }
+
     //check confirm password
     if(password !== confirmPassword){
         throw new AppError('Password and confirmPassword do not matching',400)
     }
 
-    //add user into database
+    //hashed password
     const hashedPassword = bcrypt.hashSync(password, 10)
-    const userDataNoToken = await userRepo.addUser(username,email,hashedPassword)
-    if(!userDataNoToken){
-        throw new AppError("There are already have this user",409)
-    }
+    //add user into database
+    const newUserData = await userRepo.addUser(username,email,hashedPassword)
     
     // genarate new token for user
-    const accessToken = jwtService.generateAccessToken(userDataNoToken)
-    const refreshToken = jwtService.generateRefreshToken(userDataNoToken)
-    const userData = await userRepo.updateRefreshToken(userDataNoToken.id,refreshToken)
- 
-    return {...userData,access_token:accessToken}
+    const result = await updateNewToken(newUserData)
+    return  result
 
 }
 
+const updateNewToken = async (userData)=>{
+    //new token
+    const accessToken = jwtService.generateAccessToken(userData)
+    const refreshToken = jwtService.generateRefreshToken(userData)
+
+    const result = await userRepo.updateRefreshToken(userData.id,refreshToken)
+    return {...result,access_token:accessToken}
+}
+
 const login = async (email, password) => {
+
+    //check field
+        if(!email || !password){
+            const missingfield = []
+            if(!email){
+                missingfield.push('email')
+            }
+            if(!password){
+                missingfield.push('password')
+            }
+            throw new AppError("Missing fields input " +  missingfield.join(','),400)
+        }
+
     // checking if user exist in database
     const oldUserData = await userRepo.findByEmail(email)
     if(!oldUserData){
@@ -41,27 +77,19 @@ const login = async (email, password) => {
          throw new AppError("Invalid email or password",401)
     }
 
-    //create new token
-    const accessToken = jwtService.generateAccessToken(oldUserData)
-    const refreshToken = jwtService.generateRefreshToken(oldUserData)
+    //blacklist old refresh token
     await blacklisttokenRepo.addBlackListToken(oldUserData.refresh_token)
-    const userData = await userRepo.updateRefreshToken(oldUserData.id,refreshToken)
-    
-    return {...userData,access_token:accessToken}
+    //create new token
+    const result = await updateNewToken(oldUserData)
+    return result
 }
 
 const refresh = async (userData)=>{
     //blacklist old refresh token
     await blacklisttokenRepo.addBlackListToken(userData.refresh_token)
-
-    //generate new one
-    const refreshToken = jwtService.generateRefreshToken(userData)
-    const accessToken = jwtService.generateAccessToken(userData)
-
-    //update new one
-    const newUserData = await userRepo.updateRefreshToken(userData.id,refreshToken)
-
-    return {...newUserData,access_token:accessToken}
+    
+    const result = await updateNewToken(userData)
+    return result
 }
 
 const logout = async (userData)=>{
@@ -73,10 +101,28 @@ const logout = async (userData)=>{
     await userRepo.updateRefreshToken(userData.id,newRefreshToken)
 }
 
-const deleteUser = async(userData)=>{
+const deleteUser = async(userId,role,targetId=null)=>{
+
     //delete artist before delete user
-    await artistService.deleteArtist(userData)
-    const deletedUserData = await userRepo.deleteUser(userData.id)
+    if(role === 'artist'){
+        await artistService.deleteArtist(userId)
+    }
+    const deletedUserData = await userRepo.deleteUser(userId)
+    return deletedUserData
+
+}
+
+const deleteUserById = async(userId,role,targetId)=>{
+ 
+    if(!((targetId && role == 'admin') || targetId == userId)){
+        throw new AppError("You are not allow to delete other user",401)
+    }
+
+    //delete artist before delete user
+    if(role === 'artist'){
+        await artistService.deleteArtist(targetId)
+    }
+    const deletedUserData = await userRepo.deleteUser(targetId)
     return deletedUserData
 
 }
@@ -101,11 +147,13 @@ const updateUser = async(userId,username,email,password)=>{
     return response
 }
 
+
 module.exports = {
     register,
     login,
     refresh,
     logout,
     deleteUser,
+    deleteUserById,
     updateUser
 }

@@ -1,5 +1,6 @@
 const artistService = require('../services/artistService')
 const imageService = require('../services/imageService')
+const AppError = require('../errors/errorHandle')
 
 const register = async(req,res)=>{
     try{
@@ -28,6 +29,22 @@ const deleteArtist = async(req,res)=>{
     }
 }
 
+const deleteArtistById = async(req,res)=>{
+    try{
+        const artistId = req.params.artistId
+        const userId = req.userData.id
+        const role = req.userData.role
+        const artistData = await artistService.getProfileById(artistId)
+        if(!(role == 'admin' || userId == artistData.user_id)){
+            throw new AppError("You are not allow to delete other artist",401)
+        }
+        const response = await artistService.deleteArtist(artistData.user_id)
+        res.status(200).json({message:"Delete artist success",data:response})
+    }catch(error){
+        res.status(error.status || 500).json({message:"Delete artist failed",error: error.message})
+    }
+}
+
 const updateArtist = async(req,res)=>{
     try{
         const userId = req.userData.id
@@ -42,8 +59,18 @@ const updateArtist = async(req,res)=>{
 
 const getProfile = async(req,res)=>{
     try{
+        const {userId,name,sex,birthdate,nationality,createAt} = req.query
+        const response = await artistService.getProfile(userId,name,sex,birthdate,nationality,createAt)
+        res.status(200).json({message:"Get profile success",data:response})
+    }catch(error){
+        res.status(error.status || 500).json({message:"Get profile failed",error: error.message})
+    }
+}
+
+const getProfileById = async(req,res)=>{
+    try{
         const artistId = req.params.artistId
-        const response = await artistService.getProfile(artistId)
+        const response = await artistService.getProfileById(artistId)
         res.status(200).json({message:"Get profile success",data:response})
     }catch(error){
         res.status(error.status || 500).json({message:"Get profile failed",error: error.message})
@@ -53,6 +80,8 @@ const getProfile = async(req,res)=>{
 module.exports ={
     register,
     getProfile,
+    getProfileById,
     updateArtist,
-    deleteArtist
+    deleteArtist,
+    deleteArtistById
 }

@@ -12,8 +12,10 @@ components:
         type: object
         properties:
           message:
+            $ref: '#/components/responses/messageResponses/loginMessages/failed'
+          error:
             type: string
-            example: 'Missing fields input ...'
+            example: Missing fields input ...
       failed_401:
         type: object
         properties:
@@ -32,12 +34,19 @@ components:
     
     registerResponses:
       success:
-          type: object
-          properties:
-            message:
-              $ref: '#/components/responses/messageResponses/registerMessages/success'
-            data:
-              $ref: '#/components/responses/dataResponses/userDataWithAccessToken'
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerMessages/success'
+          data:
+            $ref: '#/components/responses/dataResponses/userDataWithAccessToken'
+      failed_400:
+        type: object
+        properties:
+          message:
+            $ref: '#/components/responses/messageResponses/registerMessages/failed'
+          error:
+            type: string
       failed_409:
         type: object
         properties:
@@ -45,7 +54,7 @@ components:
             $ref: '#/components/responses/messageResponses/registerMessages/failed'
           error:
             type: string
-            example:  There are already have this user
+            example:  This email already taken
       failed_500:
         type: object
         properties:

@@ -13,6 +13,8 @@ app.post('/logout',tokenCheck.accessTokenCheck,authController.logout)
 
 app.delete('/delete',tokenCheck.accessTokenCheck,authController.deleteUser)
 
+app.delete('/delete/:userId',tokenCheck.accessTokenCheck,authController.deleteUserById)
+
 app.get('/getme',tokenCheck.accessTokenCheck, authController.getme)
 
 app.patch('/update/:id',tokenCheck.accessTokenCheck,authController.updateProfileById)

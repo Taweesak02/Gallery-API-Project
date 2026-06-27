@@ -2,10 +2,10 @@ components:
   schemas:
     tokenCheckResponses:
       schema:
-          type: object
-          properties:
-            message:
-              type: string
+        type: object
+        properties:
+          message:
+            type: string
       refreshTokenUnvalid:
         value:
           message: refresh token not correct

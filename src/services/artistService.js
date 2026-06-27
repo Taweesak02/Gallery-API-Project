@@ -27,7 +27,7 @@ const register = async (userId,name,sex,birth_date,nationality,imagePath)=> {
         if(imagePath){
             artistData.push(`profile_image = '${imagePath}'`)
         }
-        updatedData = await artistRepo.editArtist(userId,artistData)
+        updatedData = await artistRepo.updateArtist(userId,artistData)
 
         return updatedData
     }
@@ -56,6 +56,7 @@ const deleteArtist = async(userId)=>{
     await userRepo.updateRole(userId,'user')
    
 }
+
 
 const updateArtist = async(userId,name,sex,birth_date,nationality,imagePath)=>{
     // check what change
@@ -91,8 +92,13 @@ const updateArtist = async(userId,name,sex,birth_date,nationality,imagePath)=>{
     return response
 }
 
+const getProfile = async(userId,name,sex,birthdate,nationality,createAt)=>{
+    const response = await artistRepo.getArtist(userId,name,sex,birthdate,nationality,createAt)
 
-const getProfile = async (artistId)=>{
+    return response
+}
+
+const getProfileById = async (artistId)=>{
     const response = await artistRepo.findByID(artistId)
     if(!response){
          throw new AppError('Artist Not Found',404)
@@ -102,6 +108,7 @@ const getProfile = async (artistId)=>{
 
 module.exports = {
     register,
+    getProfileById,
     getProfile,
     updateArtist,
     deleteArtist

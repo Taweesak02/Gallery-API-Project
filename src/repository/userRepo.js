@@ -1,4 +1,5 @@
 const pool = require('../configs/dbConfig')
+const AppError = require('../errors/errorHandle')
 
 const addUser = async (username,email,password)=>{
     try{
@@ -8,7 +9,10 @@ const addUser = async (username,email,password)=>{
         )
         return result.rows[0]
     }catch(error){
-        return null
+        if(error.code === '23505'){
+            throw new AppError("This email already taken",409)
+        }
+        throw new AppError("Database error",500)
     }
 }
 //easy to use

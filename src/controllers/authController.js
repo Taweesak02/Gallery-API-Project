@@ -4,25 +4,6 @@ const {userWithAccessResponse,deleteUserResponse,fullUserResponse} = require('..
 const register = async (req, res) => {
     try {
         const { username, email, password, confirmPassword } = req.body
-
-        // check field input
-        if(!username || !email || !password || !confirmPassword){
-            let missingfield = []
-            if(!username){
-                missingfield.push('username')
-            }
-            if(!email){
-                missingfield.push('email')
-            }
-            if(!password){
-                missingfield.push('password')
-            }
-            if(!confirmPassword){
-                missingfield.push('confirmPassword')
-            }
-            return res.status(400).json({message:'Missing fields input ' + missingfield.join(',')})
-        }
-
         const response = await authService.register(username,email,password,confirmPassword)
         setCookie(res,response.refresh_token)
         res.status(201).json({
@@ -38,18 +19,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     try{
         const { email, password } = req.body
-
-        //check field
-        if(!email || !password){
-            let missingfield = []
-            if(!email){
-                missingfield.push('email')
-            }
-            if(!password){
-                missingfield.push('password')
-            }
-            return res.status(400).json({ message: 'Missing fields input ' + missingfield.join(',')})
-        }
 
         const response = await authService.login(email, password)
         setCookie(res,response.refresh_token)
@@ -89,9 +58,27 @@ const logout = async(req,res)=>{
 
 const deleteUser = async(req,res)=>{
     try{
-        const userData = req.userData
-        const response = await authService.deleteUser(userData)
+        const userId = req.userData.id
+        const role = req.userData.role
+        const response = await authService.deleteUser(userId,role)
+
         res.clearCookie("refreshToken")
+        res.status(200).json({
+            message:"Delete user success",
+            data: deleteUserResponse(response)
+        })
+    }catch(error){
+        res.status(error.status || 500).json({message:"Delete user failed",error:error.message})
+    }
+}
+
+const deleteUserById = async(req,res)=>{
+    try{
+        const userId = req.userData.id
+        const role = req.userData.role
+        const targetId = req.params.userId
+        const response = await authService.deleteUserById(userId,role,targetId)
+
         res.status(200).json({
             message:"Delete user success",
             data: deleteUserResponse(response)
@@ -126,7 +113,6 @@ const updateProfile = async(req,res)=>{
         res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
     }
 }
-
 //update other data for admin only or edit yourself id
 const updateProfileById = async(req,res)=>{
     try{
@@ -167,6 +153,7 @@ module.exports = {
     refresh,
     logout,
     deleteUser,
+    deleteUserById,
     getme,
     updateProfile,
     updateProfileById

@@ -13,8 +13,7 @@ components:
           type: string
           example: Register success
         failed:
-          type: string
-          example: Register failed
+          default: Register failed
       refreshMessages:
         success:
           type: string

@@ -55,6 +55,23 @@
           application/json:
             schema:
               $ref: '#/components/schemas/registerResponses/success'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/registerResponses/failed_400'
+            examples:
+              missingInput:
+                value:
+                 
+                  message: Register failed
+                  error: Missing fields input ...
+              passwordNotMatching:
+                value:
+                  message: Register failed
+                  error: Password and confirmPassword do not matching
+     
       409:
         description: User already exist
         content:
@@ -134,6 +151,43 @@
     tags: [Authentication]
     summary: Delete user
     description: Delete user from database
+    responses:
+      200:
+        description: Delete success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deleteResponses/success'
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tokenCheckResponses/schema'
+            examples:
+              noAccessToken:
+                $ref: '#/components/schemas/tokenCheckResponses/noToken'
+              invalidAccessToken:
+                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+      500:
+        description: Delete failed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deleteResponses/failed_500'
+    
+/v1/auth/delete/{userId}:
+  delete:
+    tags: [Authentication]
+    summary: Delete user by Id
+    description: Delete user by Id from database admin only
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: The numeric ID of the user to retrieve.
+        schema:
+          type: integer
     responses:
       200:
         description: Delete success

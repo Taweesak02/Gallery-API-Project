@@ -60,7 +60,8 @@ const editArtwork = async(artistId,artworkId,title,image_path)=>{
 
     const result = await pool.query(
         `UPDATE gallerys
-        SET ${setvaraiable.join(",")}
+        SET ${setvaraiable.join(",")},
+        updated_at = CURRENT_TIMESTAMP
         WHERE id = ${artworkId} and artist_id = ${artistId}  
         RETURNING *`
     )

@@ -23,7 +23,8 @@ const deleteArtist = async(id)=>{
 const updateArtist = async(id,editData)=>{
     const result = await pool.query(
         `UPDATE artists
-        SET ${editData.join(",")}
+        SET ${editData.join(",")},
+        updated_at = CURRENT_TIMESTAMP
         WHERE user_id = ${id}  
         RETURNING *`,
     )
@@ -46,10 +47,45 @@ const findByUserId = async (userId)=>{
     return result.rows[0] || null
 }
 
+const getArtist = async (userId,name,sex,birthdate,nationality,createAt)=>{
+    const queryVariable = []
+
+    if(userId){
+        queryVariable.push(`user_id = ${userId}`)
+    }
+    if(name){
+        queryVariable.push(`name LIKE '%${name}%'`)
+    }
+    if(sex){
+        queryVariable.push(`sex = '${sex}'`)
+    }
+    if(birthdate){
+        queryVariable.push(`birth_date = '${birthdate}'`)
+    }
+    if(nationality){
+        queryVariable.push(`nationality = '${nationality}'`)
+    }
+    if(createAt){
+        queryVariable.push(`created_at = '${createAt}'`)
+    }
+
+    const result = await pool.query(
+        `Select * from artists  ${
+            queryVariable.length === 0
+            ? ''
+            : 'Where '+ queryVariable.join(' and ')}
+        
+        `
+    )
+
+    return result.rows || null
+}
+
 module.exports = {
     addArtist,
     findByID,
     findByUserId,
     updateArtist,
+    getArtist,
     deleteArtist
 }

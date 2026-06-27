@@ -71,6 +71,43 @@
             schema: 
               $ref: '#/components/schemas/deleteArtistResponses/failed_500'
 
+/v1/artist/delete/{artistId}:
+  delete:
+    tags: [Artist]
+    summary: Delete Artist by Id
+    description: Delete artist from Database admin only
+    parameters:
+      - name: artistId
+        in: path
+        required: true
+        description: The numeric ID of the user to retrieve.
+        schema:
+          type: integer
+    responses:
+      200:
+        description: Delete success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/deleteArtistResponses/success'
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tokenCheckResponses/schema'
+            examples:
+              noAccessToken:
+                $ref: '#/components/schemas/tokenCheckResponses/noToken'
+              invalidAccessToken:
+                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+      500:
+        description: Delete failed
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/deleteArtistResponses/failed_500'
+
 /v1/artist/update:
   patch:
     tags: [Artist]
