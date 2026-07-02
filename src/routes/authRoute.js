@@ -17,8 +17,12 @@ app.delete('/delete/:userId',tokenCheck.accessTokenCheck,authController.deleteUs
 
 app.get('/getme',tokenCheck.accessTokenCheck, authController.getme)
 
-app.patch('/update/:id',tokenCheck.accessTokenCheck,authController.updateProfileById)
+app.patch('/update/:userId',tokenCheck.accessTokenCheck,authController.updateProfileById)
 
 app.patch('/update',tokenCheck.accessTokenCheck,authController.updateProfile)
+
+
+
+
 
 module.exports = app

@@ -1,4 +1,5 @@
 const pool = require('../configs/dbConfig')
+const AppError = require('../utils/appError')
 
 const addArtist = async(userId,name)=>{
     try{
@@ -13,11 +14,15 @@ const addArtist = async(userId,name)=>{
 }
 
 const deleteArtist = async(id)=>{
-    const result = await pool.query(
-        `delete from artists where user_id = $1 returning *`,
-        [id]
-    )
-    return result.rows[0]
+    try{
+        const result = await pool.query(
+            `delete from artists where id = $1 returning *`,
+            [id]
+        )
+        return result.rows[0]
+    }catch(error){
+        throw new AppError('There are no this artist',404)
+    }
 }
 
 const updateArtist = async(id,editData)=>{
@@ -36,7 +41,10 @@ const findByID = async (id)=>{
         `SELECT * FROM artists WHERE id = $1`,
         [id]
     )
-    return result.rows[0] || null
+    if(result.rows[0] === undefined){
+        throw new AppError('There are no this artist',404)
+    }
+    return result.rows[0] 
 }
 
 const findByUserId = async (userId)=>{
@@ -44,7 +52,11 @@ const findByUserId = async (userId)=>{
         `SELECT * FROM artists WHERE user_id = $1`,
         [userId]
     )
-    return result.rows[0] || null
+    if(result.rows[0] === undefined){
+        throw new AppError('There are no this artist',404)
+    }
+    return result.rows[0]
+ 
 }
 
 const getArtist = async (userId,name,sex,birthdate,nationality,createAt)=>{

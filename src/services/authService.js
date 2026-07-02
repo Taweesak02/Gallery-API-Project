@@ -2,7 +2,7 @@ const userRepo = require('../repository/userRepo')
 const artistService = require('../services/artistService')
 const jwtService = require('./jwtService')
 const blacklisttokenRepo = require('../repository/blackListTokenRepo')
-const AppError = require('../errors/errorHandle')
+const AppError = require('../utils/appError')
 const bcrypt = require('bcrypt')
 const { deleteArtist } = require('../repository/artistRepo')
 
@@ -40,15 +40,6 @@ const register = async (username,email, password,confirmPassword)=>{
     const result = await updateNewToken(newUserData)
     return  result
 
-}
-
-const updateNewToken = async (userData)=>{
-    //new token
-    const accessToken = jwtService.generateAccessToken(userData)
-    const refreshToken = jwtService.generateRefreshToken(userData)
-
-    const result = await userRepo.updateRefreshToken(userData.id,refreshToken)
-    return {...result,access_token:accessToken}
 }
 
 const login = async (email, password) => {
@@ -115,7 +106,7 @@ const deleteUser = async(userId,role,targetId=null)=>{
 const deleteUserById = async(userId,role,targetId)=>{
  
     if(!((targetId && role == 'admin') || targetId == userId)){
-        throw new AppError("You are not allow to delete other user",401)
+        throw new AppError("You are not allow to delete other user",403)
     }
 
     //delete artist before delete user
@@ -127,7 +118,17 @@ const deleteUserById = async(userId,role,targetId)=>{
 
 }
 
-const updateUser = async(userId,username,email,password)=>{
+const updateUser = async(userData,username,email,password,targetId = null)=>{
+
+    if(targetId){
+        //checking is admin or is own id
+        if(!((userData.role == 'admin') || targetId == userData.id)){
+            throw new AppError("You are not allow to update other user",403)
+        }
+    }else{
+        targetId = userData.id
+    }
+    
     // what data change
     const editData = []
     if(username){
@@ -140,13 +141,22 @@ const updateUser = async(userId,username,email,password)=>{
         const hashedPassword = bcrypt.hashSync(password, 10)
         editData.push(`password = '${hashedPassword}'`)
     }
-    const response =  await userRepo.updateData(userId,editData)
+    const response =  await userRepo.updateData(targetId,editData)
     if(!response){
         throw new AppError("New data is conflict in database",409)
     }
     return response
 }
 
+const updateNewToken = async (userData)=>{
+    
+    //new token
+    const accessToken = jwtService.generateAccessToken(userData)
+    const refreshToken = jwtService.generateRefreshToken(userData)
+
+    const result = await userRepo.updateRefreshToken(userData.id,refreshToken)
+    return {...result,access_token:accessToken}
+}
 
 module.exports = {
     register,

@@ -1,5 +1,5 @@
 const pool = require('../configs/dbConfig')
-const AppError = require('../errors/errorHandle')
+const AppError = require('../utils/appError')
 
 const addUser = async (username,email,password)=>{
     try{

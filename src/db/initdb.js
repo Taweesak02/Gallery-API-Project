@@ -33,7 +33,7 @@ async function initDB() {
                 user_id INT NOT NULL unique,
                 name VARCHAR(255) not null unique,
                 sex varchar(50) default 'unknown',
-                birth_date Timestamp default CURRENT_TIMESTAMP,
+                birth_date Timestamp,
                 nationality varchar(50) default 'unknown',
                 profile_image text default 'unknown',
                 created_at TIMESTAMP not null DEFAULT CURRENT_TIMESTAMP,

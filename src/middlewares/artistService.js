@@ -1,26 +1,17 @@
 const artistRepo = require('../repository/artistRepo')
 const galleryRepo = require('../repository/galleryRepo')
 const userRepo = require('../repository/userRepo')
-const AppError = require('../utils/appError')
+const AppError = require('../errors/appError')
 const imageService = require('./imageService')
 
-const register = async (userData,name,sex,birth_date,nationality,imagePath)=> {
-
-     // check name is require if not delete image that upload before add artist
-    if(!name && imagePath){
-        await imageService.deleteImages([imagePath])
-        throw new AppError("Artist name required",400)
-    }
+const register = async (userId,name,sex,birth_date,nationality,imagePath)=> {
     //add artist
-    const response = await artistRepo.addArtist(userData.id,name)
+    const response = await artistRepo.addArtist(userId,name)
     if(!response){
         throw new AppError("There are already have this artist",409)
     }
     //update role artist to user
-    if(userData.role !== 'admin'){
-        await userRepo.updateRole(userData.id,'artist')
-    }
-    
+    await userRepo.updateRole(userId,'artist')
     //update artist data
     if(sex || birth_date || nationality || imagePath){
         const artistData = []
@@ -36,49 +27,18 @@ const register = async (userData,name,sex,birth_date,nationality,imagePath)=> {
         if(imagePath){
             artistData.push(`profile_image = '${imagePath}'`)
         }
-        updatedData = await artistRepo.updateArtist(userData,artistData)
+        updatedData = await artistRepo.updateArtist(userId,artistData)
 
         return updatedData
     }
     return response
 }
 
-const deleteArtist = async(userData)=>{
-    const artistData = await artistRepo.findByUserId(userData.id)
-    // delete artwork require artist Id
-    await clearImageFromArtist(artistData)
-    // delete artist account
-    const response = await artistRepo.deleteArtist(artistData.id)
-
-    if(userData.role !== 'admin'){
-        await userRepo.updateRole(userData.id,'user')
-    }
-    return response
-}
-
-const deleteArtistById = async(userData,targetId)=>{
-     
-    const artistData = await artistRepo.findByID(targetId)
-
-    if(!(userData.role !== 'admin' || userData.id !== artistData.user_id)){
-        throw new AppError("You are not allow to delete other artist account",403)
-    }
-
-    await clearImageFromArtist(artistData)
-    // delete artist account
-    const response = await artistRepo.deleteArtist(artistData.id)
-
-    targetUserData = await userRepo.getData(artistData.user_id)
-    if(targetUserData.role !== 'admin'){
-        await userRepo.updateRole(targetUserData.id,'user')
-    } 
-    return response
-}
-
-const clearImageFromArtist = async (artistData)=>{
-    // delete artwork require artist Id
+const deleteArtist = async(userId)=>{
+    const artistData = await artistRepo.findByUserId(userId)
     const allArtwork = await galleryRepo.getArtworkPathByArtistId(artistData.id)
     const imagePaths = allArtwork.map(item => item.image_path)
+
     //delete artwork image if have it
     if(imagePaths){
         await imageService.deleteImages(imagePaths)
@@ -87,7 +47,16 @@ const clearImageFromArtist = async (artistData)=>{
     if(!(artistData.profile_image == 'unknown')){
         await imageService.deleteImages([artistData.profile_image])
     }
+    // delete artist account
+    const response = await artistRepo.deleteArtist(userId)
+    if(!response){
+        throw new AppError('There are no this artist',404)
+    }
+    //update role user to user
+    await userRepo.updateRole(userId,'user')
+   
 }
+
 
 const updateArtist = async(userId,name,sex,birth_date,nationality,imagePath)=>{
     // check what change
@@ -142,6 +111,5 @@ module.exports = {
     getProfileById,
     getProfile,
     updateArtist,
-    deleteArtist,
-    deleteArtistById
+    deleteArtist
 }

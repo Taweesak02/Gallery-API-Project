@@ -1,6 +1,6 @@
 const artistRepo = require('../repository/artistRepo')
 const galleryRepo = require('../repository/galleryRepo')
-const AppError = require('../errors/errorHandle')
+const AppError = require('../utils/appError')
 const imageService = require('./imageService')
 
 const addArtwork =  async (userId,title,imagePath)=>{
@@ -14,7 +14,6 @@ const addArtwork =  async (userId,title,imagePath)=>{
         if(imagePath){
             await imageService.deleteImages([imagePath])
         }
-            
         throw new AppError("Artist Not Found",404)
         
     }
@@ -35,29 +34,43 @@ const getArtworkById = async (artworkId)=>{
     return response
 }
 
-const editArtwork = async(userId,artworkId,title,imagePath)=>{
+const editArtwork = async(userData,artworkId,title,imagePath)=>{
 
-    if(!title && !imagePath){
-        throw new AppError("No Data to Edit",400)
+    const artworkData = await galleryRepo.getArtworkById(artworkId)
+    const artistData = await artistRepo.findByUserId(userData.id)
+    if(userData.role !== 'admin' && artworkData.artist_id !== artistData.id ){
+        throw new AppError("You are not allow to edit other artwork",403)
     }
 
-    if (imagePath){
-        const artworkData = await galleryRepo.getArtworkById(artworkId)
+    const setvaraiable = []
+
+    if(title){
+        setvaraiable.push(`title = '${title}' `)
+    }
+   
+    if(imagePath){
+        setvaraiable.push(`image_path = '${imagePath}' `)
         await imageService.deleteImages([artworkData.image_path])
     }
-
-    const artistData = await artistRepo.findByUserId(userId)
-    const response = await galleryRepo.editArtwork(artistData.id,artworkId,title,imagePath)
-    return response
+    
+    if(setvaraiable.length == 0){
+        throw new AppError("No data to edit",400)
+    }
+    
+    const result = await galleryRepo.editArtwork(artworkId,setvaraiable)
+    return result
 }
 
-const deleteArtwork = async(userId,artworkId)=>{
-    const artistData = await artistRepo.findByUserId(userId)
-    const response = await galleryRepo.deleteArtwork(artistData.id,artworkId)
-    await imageService.deleteImages([response.image_path])
-    if(!response){
-        throw new AppError('artwork not found',404)
+const deleteArtwork = async(userData,artworkId)=>{
+    const artworkData = await galleryRepo.getArtworkById(artworkId)
+    const artistData = await artistRepo.findByUserId(userData.id)
+    if(userData.role !== 'admin' && artworkData.artist_id !== artistData.id ){
+        throw new AppError("You are not allow to delete other artwork",403)
     }
+
+    const response = await galleryRepo.deleteArtwork(artworkId)
+    await imageService.deleteImages([response.image_path])
+  
     return response
 }
 

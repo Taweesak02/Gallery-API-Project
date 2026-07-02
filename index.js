@@ -2,6 +2,7 @@ const express = require('express')
 const cookieParser = require('cookie-parser');
 const app = express()
 const initDB = require('./src/db/initdb')
+const errorHandler = require('./src/middlewares/errorHandler')
 const authRoute = require('./src/routes/authRoute')
 const artistRoute = require('./src/routes/artistRoute')
 const galleryRoute = require('./src/routes/galleryRoute')
@@ -36,6 +37,7 @@ app.get('/', (req, res) => {
   res.status(200).json({message:'Welcome to the Gallery API'})
 })
 
+app.use(errorHandler)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)

@@ -1,151 +1,80 @@
 const authService = require('../services/authService')
+const asyncHandler = require('../middlewares/asyncHandler')
 const {userWithAccessResponse,deleteUserResponse,fullUserResponse} = require('../models/userResponse')
+const setCookie = require('../utils/setCookie')
+const responseHandler = require('../utils/responseHandler')
 
-const register = async (req, res) => {
-    try {
-        const { username, email, password, confirmPassword } = req.body
-        const response = await authService.register(username,email,password,confirmPassword)
-        setCookie(res,response.refresh_token)
-        res.status(201).json({
-            message:"Register success",
-            data: userWithAccessResponse(response)
-        })
-    }
-    catch (error) {
-        res.status(error.status || 500).json({message:"Register failed",error: error.message})
-    }
-}
+const register = asyncHandler(async (req, res) => {
+    const { username, email, password, confirmPassword } = req.body
+    const response = await authService.register(username,email,password,confirmPassword)
+    setCookie(res,response.refresh_token)
+    responseHandler(res,201,req.originalUrl,userWithAccessResponse(response))
+})
 
-const login = async (req, res) => {
-    try{
-        const { email, password } = req.body
+const login = asyncHandler (async(req,res) => {
+    const { email, password } = req.body
+    const response = await authService.login(email, password)
+    setCookie(res,response.refresh_token)
+    responseHandler(res,200,req.originalUrl,userWithAccessResponse(response))
+})
 
-        const response = await authService.login(email, password)
-        setCookie(res,response.refresh_token)
-        res.status(200).json({
-            message:"Login success",
-            data: userWithAccessResponse(response)
-        })
-    }catch (error) {
-        res.status(error.status || 500).json({message:"Login failed",error: error.message})
-    }   
-}
 // read refreshtoken to get new accesstoken
-const refresh = async(req,res)=>{
-    try{
-        const userData = req.userData
-        const response = await authService.refresh(userData)
-        setCookie(res,response.refresh_token)
-        res.status(200).json({
-            message:"Refresh success",
-            data: userWithAccessResponse(response)
-        })
-    }catch(error) {  
-        res.status(error.status || 500).json({message:"Refresh failed",error:error.message})
-    }
-}
+const refresh = asyncHandler( async(req,res)=>{
+    const userData = req.userData
+    const response = await authService.refresh(userData)
+    setCookie(res,response.refresh_token)
+    responseHandler(res,200,req.originalUrl,userWithAccessResponse(response))
+})
 
-const logout = async(req,res)=>{
-    try{
-        const userData = req.userData
-        const response = await authService.logout(userData)
-        res.clearCookie("refreshToken")
-        res.status(200).json({message:"Logout success"})
-    }catch(error) {
-        res.status(error.status || 500).json({message:"Logout failed",error:error.message})
-    }
-}
+const logout = asyncHandler(async(req,res)=>{
+    const userData = req.userData
+    const response = await authService.logout(userData)
+    res.clearCookie("refreshToken")
+    responseHandler(res,200,req.originalUrl,"logout success")
 
-const deleteUser = async(req,res)=>{
-    try{
-        const userId = req.userData.id
-        const role = req.userData.role
-        const response = await authService.deleteUser(userId,role)
+})
 
-        res.clearCookie("refreshToken")
-        res.status(200).json({
-            message:"Delete user success",
-            data: deleteUserResponse(response)
-        })
-    }catch(error){
-        res.status(error.status || 500).json({message:"Delete user failed",error:error.message})
-    }
-}
+const deleteUser = asyncHandler(async(req,res)=>{
+    const userId = req.userData.id
+    const role = req.userData.role
+    const response = await authService.deleteUser(userId,role)
 
-const deleteUserById = async(req,res)=>{
-    try{
-        const userId = req.userData.id
-        const role = req.userData.role
-        const targetId = req.params.userId
-        const response = await authService.deleteUserById(userId,role,targetId)
+    res.clearCookie("refreshToken")
+    responseHandler(res,200,req.originalUrl, deleteUserResponse(response))
+})
 
-        res.status(200).json({
-            message:"Delete user success",
-            data: deleteUserResponse(response)
-        })
-    }catch(error){
-        res.status(error.status || 500).json({message:"Delete user failed",error:error.message})
-    }
-}
+const deleteUserById = asyncHandler(async(req,res)=>{
+    const userId = req.userData.id
+    const role = req.userData.role
+    const targetId = req.params.userId
+    const response = await authService.deleteUserById(userId,role,targetId)
 
-const getme = async(req,res)=>{
-    try{
-        const userData = req.userData
-        res.status(200).json({
-            message:"Getme success",
-            data:fullUserResponse(userData)
-        })
-    }catch(error){
-        res.status(error.status || 500).json({message:"Getme failed",error:error.message})
-    }
-}
+    responseHandler(res,200,req.originalUrl, deleteUserResponse(response))
+})
 
-const updateProfile = async(req,res)=>{
-    try{
-        const userData = req.userData
-        const {username,email,password} = req.body
-        const response = await authService.updateUser(userData.id,username,email,password)
-        res.status(200).json({
-            message:"Update profile success",
-            data:fullUserResponse(response)
-        })
-    }catch(error){
-        res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
-    }
-}
+const getme = asyncHandler(async(req,res)=>{
+    const userData = req.userData
+ 
+    responseHandler(res,200,req.originalUrl, fullUserResponse(userData))
+})
+
+const updateProfile = asyncHandler(async(req,res)=>{
+
+    const userData = req.userData
+    const {username,email,password} = req.body
+    const response = await authService.updateUser(userData,username,email,password)
+    responseHandler(res,200,req.originalUrl, fullUserResponse(response))
+})
+
 //update other data for admin only or edit yourself id
-const updateProfileById = async(req,res)=>{
-    try{
-        const userData = req.userData
-        const targetId = req.params.id
-        const {username,email,password} = req.body
-       
-        //checking is admin or is own id
-        if(!((targetId && userData.role == 'admin') || targetId == userData.id)){
-            return res.status(401).json({message:"Update profile failed",error:"You are not allow to update other user"})
-        }
-        
-        const response = await authService.updateUser(targetId,username,email,password)
-        res.status(200).json({
-            message:"Update profile success",
-            data:fullUserResponse(response)
-        })
-    }catch(error){
-        res.status(error.status || 500).json({message:"Update profile failed",error:error.message})
-    }
-}
-
-//set refresh cookie
-const setCookie = (res,refreshToken)=>{
-    res.cookie("refreshToken",refreshToken,
-            {
-                httpOnly: true, // Prevents client-side JS from accessing the cookie (XSS protection)
-                secure: true,   // Only sent over HTTPS
-                sameSite: 'lax' // Protects against CSRF attacks
-            }
-        )
-}
-
+const updateProfileById = asyncHandler(async(req,res)=>{
+    const userData = req.userData
+    const targetId = req.params.userId
+    const {username,email,password} = req.body
+    const response = await authService.updateUser(userData,username,email,password,targetId)
+    responseHandler(res,200,req.originalUrl, fullUserResponse(response))
+    
+})
 
 module.exports = {
     register,
