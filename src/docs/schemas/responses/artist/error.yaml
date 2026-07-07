@@ -1,0 +1,55 @@
+components:
+  schemas:
+    ArtistGetErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/
+            message: Error message
+    ArtistGetByIdErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/{artistId}
+            message: Error message
+    ArtistRegisterErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/register
+            message: Error message
+ 
+    ArtistDeleteErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/delete
+            message: Error message
+    
+    ArtistDeleteByIdErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/delete/{artistId}
+            message: Error message
+
+    ArtistUpdateErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/update
+            message: Error message
+
+    ArtistUpdateByIdErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/artist/update/{artistId}
+            message: Error message

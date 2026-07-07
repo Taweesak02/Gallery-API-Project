@@ -1,6 +1,0 @@
-components:
-  responses:
-    errorResponses:
-      500:
-        type: string
-        example: Error message

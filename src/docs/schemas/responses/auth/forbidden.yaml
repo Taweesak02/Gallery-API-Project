@@ -1,0 +1,17 @@
+components:
+  schemas:
+    DeleteByIdForbiddenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 403
+            path: v1/auth/delete/{userId}
+            message: You are not allow to delete other user
+    
+    UpdateByIdForbiddenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 403
+            path: v1/auth/update/{userId}
+            message: You are not allow to update other user

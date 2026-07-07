@@ -35,6 +35,15 @@ const updateArtist = asyncHandler(async(req,res)=>{
     responseHandler(res,200,req.originalUrl,artistResponse(response))
 })
 
+const updateArtistById = asyncHandler(async(req,res)=>{
+    const artistId = req.params.artistId
+    const userData = req.userData
+    const {name,sex,birth_date,nationality} = req.body
+    const imagePath = req.file?.filename ? `/image/${req.file?.filename }` : null
+    const response = await artistService.updateArtistById(userData,artistId,name,sex,birth_date,nationality,imagePath)
+    responseHandler(res,200,req.originalUrl,artistResponse(response))
+})
+
 const getProfile = asyncHandler(async(req,res)=>{
     const {userId,name,sex,birthdate,nationality,createAt} = req.query
     const response = await artistService.getProfile(userId,name,sex,birthdate,nationality,createAt)
@@ -52,6 +61,7 @@ module.exports ={
     getProfile,
     getProfileById,
     updateArtist,
+    updateArtistById,
     deleteArtist,
     deleteArtistById
 }

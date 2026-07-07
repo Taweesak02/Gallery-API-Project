@@ -1,0 +1,25 @@
+components:
+  schemas:
+    RegisterDuplicateResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 409
+            path: v1/auth/register
+            message: This email already taken
+    
+    UpdateDuplicateResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 409
+            path: v1/auth/update
+            message: New data is conflict in database
+    
+    UpdateByIdDuplicateResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 409
+            path: v1/auth/update/{userId}
+            message: New data is conflict in database

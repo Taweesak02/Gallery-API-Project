@@ -35,16 +35,23 @@ const updateRole = async(id,role)=>{
 const updateData = async(id,editData)=>{
     try{
         const result = await pool.query(
-        `UPDATE users
-        SET ${editData.join(",")},
-        updated_at = CURRENT_TIMESTAMP
-        WHERE id = ${id}  
-        RETURNING *`
+            `UPDATE users
+            SET ${editData.join(",")},
+            updated_at = CURRENT_TIMESTAMP
+            WHERE id = ${id}  
+            RETURNING *`
         )
-        return result.rows[0]
     }catch(error){
-        return null
+        if(error.code = '23505'){
+            throw new AppError("New data is conflict in database",409)
+        }
+        throw new AppError(error,500)
     }
+    if(result.rows[0] === undefined){  
+        throw new AppError("User not found",404)
+    }
+    return result.rows[0]
+    
 }
 
 const getData = async (id)=>{
@@ -72,11 +79,16 @@ const findByRefreshToken = async (refreshToken)=>{
 }
 
 const deleteUser = async(id)=>{
+
     const result = await pool.query(
         `delete from users where id = $1 returning *`,
         [id]
     )
+    if(result.rows[0] === undefined){  
+        throw new AppError("User not found",404)
+    }
     return result.rows[0]
+
 }
 
 module.exports = {

@@ -1,0 +1,25 @@
+components:
+  schemas:
+    GalleryAddNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/gallery/add
+            message: Token is required
+    
+    GalleryEditNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/gallery/edit/{artworkId}
+            message: Token is required
+
+    GalleryDeleteNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/gallery/remove/{artworkId}
+            message: Token is required

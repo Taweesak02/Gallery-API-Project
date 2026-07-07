@@ -34,7 +34,7 @@ app.use('/v1/artist',artistRoute)
 app.use('/v1/gallery',galleryRoute)
 //default
 app.get('/', (req, res) => {
-  res.status(200).json({message:'Welcome to the Gallery API'})
+  res.status(200).json({message:'Welcome to the Gallery API',api_docs:'/docs'})
 })
 
 app.use(errorHandler)

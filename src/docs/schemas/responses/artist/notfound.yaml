@@ -1,0 +1,40 @@
+components:
+  schemas:
+    ArtistGetByIdNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/artist/{artistId}
+            message: There are no this artist
+    ArtistDeleteNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/artist/delete
+            message: There are no this artist
+    
+    ArtistDeleteByIdNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/artist/delete/{artistId}
+            message: There are no this artist
+
+    ArtistUpdateNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/artist/update
+            message: There are no this artist
+            
+    ArtistUpdateByIdNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/artist/update/{artistId}
+            message: There are no this artist

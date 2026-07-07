@@ -142,9 +142,7 @@ const updateUser = async(userData,username,email,password,targetId = null)=>{
         editData.push(`password = '${hashedPassword}'`)
     }
     const response =  await userRepo.updateData(targetId,editData)
-    if(!response){
-        throw new AppError("New data is conflict in database",409)
-    }
+
     return response
 }
 

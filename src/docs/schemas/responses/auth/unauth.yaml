@@ -1,0 +1,65 @@
+components:
+  schemas:
+    LoginInvalidAuthenticationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/login
+            message: Invalid email or password
+    
+    RefreshUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/refresh
+            message: Token is unvalid
+    
+    LogoutUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/logout
+            message: Token is unvalid
+    
+    DeleteUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/delete
+            message: Token is unvalid
+
+    DeleteByIdUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/delete/{userId}
+            message: Token is unvalid
+    
+    GetmeUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/getme
+            message: Token is unvalid
+
+    UpdateUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/update
+            message: Token is unvalid
+          
+    UpdateByIdUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/auth/update/{userId}
+            message: Token is unvalid

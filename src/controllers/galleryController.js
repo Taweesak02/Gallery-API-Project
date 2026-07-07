@@ -16,7 +16,7 @@ const getArtwork = asyncHandler(async(req,res)=>{
  
     const searchQuery = req.query
     const response = await galleryService.getArtwork(searchQuery)
-    responseHandler(res,200,req.orignalUrl,response.map(item => galleryResponse(item)))
+    responseHandler(res,200,req.orignalUrl,response.length != 0 ? response.map(item => galleryResponse(item)):"No artwork")
 })
 
 const getArtworkById = asyncHandler(async(req,res)=>{

@@ -1,0 +1,80 @@
+components:
+  schemas:
+    LoginMissingInputResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/login
+            message: Missing fields input ...
+    
+    RegisterInvalidInputResponse:
+      schema:
+        $ref: '#/components/schemas/BaseResponse'
+      examples:
+        MissingInput:
+          value:
+            status: 400
+            path: v1/auth/register
+            message: Missing fields input ... 
+        PasswordNotMatch:
+          value:
+            status: 400
+            path: v1/auth/register
+            message: Password and confirmPassword do not matching
+
+    RefreshNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/refresh
+            message: Token is required
+    
+    LogoutNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/logout
+            message: Token is required
+    
+    DeleteNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/delete
+            message: Token is required
+    
+    DeleteByIdNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/delete/{userId}
+            message: Token is required
+    
+    GetmeNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/getme
+            message: Token is required
+    
+    UpdateNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/update
+            message: Token is required
+
+    UpdateByIdNoTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/auth/update/{userId}
+            message: Token is required

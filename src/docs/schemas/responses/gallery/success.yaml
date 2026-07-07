@@ -1,0 +1,86 @@
+components:
+  schemas:
+    GalleryGetSuccessResponse:
+      schema:
+        $ref: '#/components/schemas/BaseResponse'
+      examples:
+        ShowArtworkData:
+          value:
+            status: 200
+            path: v1/gallery/
+            responses:
+              [
+                {
+                  id: 1,
+                  artist_id: 1,
+                  title: untitled,
+                  image_path: "/image/17829..." ,
+                  create_at: 2026-07-06T04:18:07.963Z
+                }, ...
+              ]
+        NoArtworkData:
+          value:
+            status: 200
+            path: v1/gallery/
+            responses:  No artwork
+
+    GalleryGetByIdSuccessResponse:
+      schema:
+        $ref: '#/components/schemas/BaseResponse'
+      examples:
+        ShowArtworkData:
+          value:
+            status: 200
+            path: v1/gallery/{artworkId}
+            responses:
+              id: 1,
+              artist_id: 1,
+              title: untitled,
+              image_path: "/image/17829..."
+              create_at: 2026-07-06T04:18:07.963Z
+                 
+        NoArtworkData:
+          value:
+            status: 200
+            path: v1/gallery/{artworkId}
+            responses:  No artwork
+    
+    GalleryAddSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/gallery/add
+            responses:
+              id: 1
+              artist_id: 1
+              title: untitled
+              image_path: /image/17829...
+              create_at: 2026-07-06T04:18:07.963Z
+
+    GalleryEditSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/gallery/edit/{artworkId}
+            responses:
+              id: 1
+              artist_id: 1
+              title: untitled
+              image_path: /image/17829...
+              create_at: 2026-07-06T04:18:07.963Z
+
+    GalleryDeleteSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/gallery/remove/{artworkId}
+            responses:
+              id: 1
+              artist_id: 1
+              title: untitled
+              image_path: /image/17829...
+              create_at: 2026-07-06T04:18:07.963Z
+                 

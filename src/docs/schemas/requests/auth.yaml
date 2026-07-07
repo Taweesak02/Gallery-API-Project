@@ -1,6 +1,6 @@
 components:
   schemas:
-    loginRequest:
+    LoginRequest:
       type: object
       required: [email, password]
       properties:
@@ -11,7 +11,7 @@ components:
           type: string
           example: "123456"
 
-    registerRequest:
+    RegisterRequest:
       type: object
       required: [username, email, password, confirmPassword]
       properties:
@@ -28,7 +28,7 @@ components:
           type: string
           example: "123456"
 
-    updateRequest:
+    UpdateRequest:
       type: object
       required: [username, email, password]
       properties:

@@ -1,0 +1,11 @@
+components:
+  schemas:
+    BaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        path:
+          type: string
+        responses:
+          type: object

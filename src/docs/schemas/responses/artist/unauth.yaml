@@ -1,0 +1,42 @@
+components:
+  schemas:
+    ArtistRegisterInvalidAuthenticationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/artist/register
+            message: Token is unvalid
+    
+    ArtistDeleteInvalidAuthenticationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/artist/delete
+            message: Token is unvalid
+    
+    ArtistDeleteByIdInvalidAuthenticationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/artist/delete/{artistId}
+            message: Token is unvalid
+    
+    ArtistUpdateInvalidAuthenticationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/artist/update
+            message: Token is unvalid
+
+    ArtistUpdateByIdInvalidAuthenticationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/artist/update/{artistId}
+            message: Token is unvalid
+    

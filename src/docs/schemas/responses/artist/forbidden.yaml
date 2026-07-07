@@ -1,0 +1,18 @@
+components:
+  schemas:
+    
+    ArtistDeleteByIdForbiddenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 403
+            path: v1/artist/delete/{artistId}
+            message: You are not allow to delete other artist
+    
+    ArtistUpdateByIdForbiddenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 403
+            path: v1/artist/update/{artistId}
+            message: You are not allow to update other artist

@@ -90,25 +90,28 @@ const clearImageFromArtist = async (artistData)=>{
 }
 
 const updateArtist = async(userId,name,sex,birth_date,nationality,imagePath)=>{
+
+    const artistData = await artistRepo.findByUserId(userId)
+    
     // check what change
     const editData = []
     if(name){
-        editData.push(`name = '${editData.name}'`)
+        editData.push(`name = '${name}'`)
     }
     if(sex){
-        editData.push(`sex = '${editData.sex}'`)
+        editData.push(`sex = '${sex}'`)
     }
     if(birth_date){
-        editData.push(`birth_date = '${editData.birth_date}'`)
+        editData.push(`birth_date = '${birth_date}'`)
     }
     if(nationality){
-        editData.push(`nationality = '${editData.nationality}'`)
+        editData.push(`nationality = '${nationality}'`)
     }
-
+    
     //check if image update or not
     if(imagePath){
         //delete lastest image
-        const artistData = await artistRepo.findByUserId(userId)
+        
         if(artistData){
             await imageService.deleteImages([artistData.profile_image])
         }
@@ -116,11 +119,44 @@ const updateArtist = async(userId,name,sex,birth_date,nationality,imagePath)=>{
         editData.push(`profile_image = '${imagePath}'`)
     }
     
-    const response = await artistRepo.updateArtist(userId,editData)
-    if(!response){
-        throw new AppError('Artist Not Found',404)
-    }
+    const response = await artistRepo.updateArtist(artistData.id,editData)
     return response
+}
+
+const updateArtistById = async (userData,targetId,name,sex,birth_date,nationality,imagePath)=>{
+    const artistData = await artistRepo.findByID(targetId)
+
+    if(!(userData.role !== 'admin' || userData.id !== artistData.user_id)){
+        throw new AppError("You are not allow to delete other artist account",403)
+    }
+
+    // check what change
+    const editData = []
+    if(name){
+        editData.push(`name = '${name}'`)
+    }
+    if(sex){
+        editData.push(`sex = '${sex}'`)
+    }
+    if(birth_date){
+        editData.push(`birth_date = '${birth_date}'`)
+    }
+    if(nationality){
+        editData.push(`nationality = '${nationality}'`)
+    }
+
+    //check if image update or not
+    if(imagePath){
+        //delete lastest image
+        if(artistData){
+            await imageService.deleteImages([artistData.profile_image])
+        }
+        //push new image
+        editData.push(`profile_image = '${imagePath}'`)
+    }
+    const response = await artistRepo.updateArtist(artistData.id,editData)
+    return response
+
 }
 
 const getProfile = async(userId,name,sex,birthdate,nationality,createAt)=>{
@@ -131,9 +167,7 @@ const getProfile = async(userId,name,sex,birthdate,nationality,createAt)=>{
 
 const getProfileById = async (artistId)=>{
     const response = await artistRepo.findByID(artistId)
-    if(!response){
-         throw new AppError('Artist Not Found',404)
-    }
+
     return response
 }
 
@@ -142,6 +176,7 @@ module.exports = {
     getProfileById,
     getProfile,
     updateArtist,
+    updateArtistById,
     deleteArtist,
     deleteArtistById
 }

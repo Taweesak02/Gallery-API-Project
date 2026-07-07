@@ -1,0 +1,101 @@
+components:
+  schemas:
+    ArtistGetSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/artist/
+            responses:
+              - id: 1
+                user_id: 1
+                name: artistName
+                sex: male
+                birthdate: 2026-07-06T04:18:07.963Z
+                nationality: thai
+              - ...
+
+    ArtistGetByIdSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/artist/{artistId}
+            responses:
+              id: 1
+              user_id: 1
+              name: artistName
+              sex: male
+              birthdate: 2026-07-06T04:18:07.963Z
+              nationality: thai
+              
+    ArtistRegisterSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/artist/register
+            responses:
+              id: 1
+              user_id: 1
+              name: artistName
+              sex: male
+              birthdate: 2026-07-06T04:18:07.963Z
+              nationality: thai
+    
+    ArtistDeleteSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/artist/delete
+            responses:
+              id: 1
+              user_id: 1
+              name: artistName
+              sex: male
+              birthdate: 2026-07-06T04:18:07.963Z
+              nationality: thai
+    ArtistDeleteByIdSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/artist/delete/{artistId}
+            responses:
+              id: 1
+              user_id: 1
+              name: artistName
+              sex: male
+              birthdate: 2026-07-06T04:18:07.963Z
+              nationality: thai
+    
+    ArtistUpdateSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/artist/update
+            responses:
+              id: 1
+              user_id: 1
+              name: artistName
+              sex: male
+              birthdate: 2026-07-06T04:18:07.963Z
+              nationality: thai
+    
+    ArtistUpdateByIdSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/artist/update/{artistId}
+            responses:
+              id: 1
+              user_id: 1
+              name: artistName
+              sex: male
+              birthdate: 2026-07-06T04:18:07.963Z
+              nationality: thai
+
+  

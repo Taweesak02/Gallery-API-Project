@@ -29,20 +29,37 @@ const options = {
     },
   },
   apis: [
+    path.join(__dirname, '../docs/schemas/responses/base.yaml'),
+
     path.join(__dirname, '../docs/paths/authPath.yaml'),
+    path.join(__dirname, '../docs/schemas/requests/auth.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/success.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/badrequest.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/unauth.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/notfound.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/conflict.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/forbidden.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/auth/error.yaml'),
+
     path.join(__dirname, '../docs/paths/artistPath.yaml'),
+    path.join(__dirname, '../docs/schemas/requests/artist.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/success.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/badrequest.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/unauth.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/notfound.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/conflict.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/forbidden.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/artist/error.yaml'),
+     
     path.join(__dirname, '../docs/paths/galleryPath.yaml'),
-    path.join(__dirname, '../docs/schemas/auth/responseSchema.yaml'),
-    path.join(__dirname, '../docs/schemas/auth/requestSchema.yaml'),
-    path.join(__dirname, '../docs/schemas/artist/responseSchema.yaml'),
-    path.join(__dirname, '../docs/schemas/artist/requestSchema.yaml'),
-    path.join(__dirname, '../docs/schemas/gallery/responseSchema.yaml'),
-    path.join(__dirname, '../docs/schemas/gallery/requestSchema.yaml'),
-    path.join(__dirname, '../docs/responses/auth.yaml'),
-    path.join(__dirname, '../docs/responses/artist.yaml'),
-    path.join(__dirname, '../docs/responses/gallery.yaml'),
-    path.join(__dirname, '../docs/responses/error.yaml'),
-    path.join(__dirname, '../docs/responses/tokenCheck.yaml')
+    path.join(__dirname, '../docs/schemas/requests/gallery.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/gallery/success.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/gallery/badrequest.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/gallery/unauth.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/gallery/notfound.yaml'),
+    // path.join(__dirname, '../docs/schemas/responses/artist/conflict.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/gallery/forbidden.yaml'),
+    path.join(__dirname, '../docs/schemas/responses/gallery/error.yaml'),
   ]
 };
 

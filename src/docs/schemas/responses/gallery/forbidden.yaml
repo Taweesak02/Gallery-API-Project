@@ -1,0 +1,18 @@
+components:
+  schemas:
+    GalleryEditForbiddenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 403
+            path: v1/gallery/edit/{artworkId}
+            message: You are not allow to edit other artwork
+    
+    GalleryDeleteForbiddenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 403
+            path: v1/gallery/remove/{artworkId}
+            message: You are not allow to delete other artwork
+  

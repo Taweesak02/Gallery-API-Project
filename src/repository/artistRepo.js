@@ -14,15 +14,16 @@ const addArtist = async(userId,name)=>{
 }
 
 const deleteArtist = async(id)=>{
-    try{
-        const result = await pool.query(
-            `delete from artists where id = $1 returning *`,
-            [id]
-        )
-        return result.rows[0]
-    }catch(error){
+    
+    const result = await pool.query(
+        `delete from artists where id = $1 returning *`,
+        [id]
+    )
+    if(result.rows[0] === undefined){
         throw new AppError('There are no this artist',404)
     }
+    return result.rows[0]
+    
 }
 
 const updateArtist = async(id,editData)=>{
@@ -30,9 +31,12 @@ const updateArtist = async(id,editData)=>{
         `UPDATE artists
         SET ${editData.join(",")},
         updated_at = CURRENT_TIMESTAMP
-        WHERE user_id = ${id}  
+        WHERE id = ${id}  
         RETURNING *`,
     )
+    if(result.rows[0] === undefined){
+        throw new AppError('There are no this artist',404)
+    }
     return result.rows[0] || null
 }
 

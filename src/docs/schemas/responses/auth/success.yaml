@@ -1,0 +1,105 @@
+components:
+  schemas:
+    LoginSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/login
+            responses:
+              id: 1
+              role: user
+              accessToken: eyJhbGciOiJIUzI1NiIsInR5cC...
+        
+    RegisterSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 201
+            path: v1/auth/register
+            responses:
+              id: 1
+              role: user
+              accessToken: eyJhbGciOiJIUzI1NiIsInR5cC...
+
+    RefreshSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/refresh
+            responses:
+              id: 1
+              role: user
+              accessToken: eyJhbGciOiJIUzI1NiIsInR5cC...
+    
+    LogoutSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/logout
+            responses:
+              id: 1
+              role: user
+              accessToken: eyJhbGciOiJIUzI1NiIsInR5cC...
+    
+    DeleteSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/delete
+            responses:
+              id: 1
+              username: "username"
+              email: "user@gmail.com"
+              role: user
+              
+    DeleteByIdSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/delete/{userId}
+            responses:
+              id: 1
+              username: "username"
+              email: "user@gmail.com"
+              role: user
+
+    GetmeSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/getme
+            responses:
+              id: 1
+              username: "username"
+              email: "user@gmail.com"
+              role: user
+    
+    UpdateSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/update
+            responses:
+              id: 1
+              username: "username"
+              email: "user@gmail.com"
+              role: user
+    
+    UpdateByIdSuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 200
+            path: v1/auth/update/{userId}
+            responses:
+              id: 1
+              username: "username"
+              email: "user@gmail.com"
+              role: user

@@ -1,0 +1,26 @@
+components:
+  schemas:
+    GalleryAddUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/gallery/add
+            message: Token is unvalid
+      
+    GalleryEditUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/gallery/edit/{artworkId}
+            message: Token is unvalid
+
+    GalleryDeleteUnvalidTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 401
+            path: v1/gallery/remove/{artworkId}
+            message: Token is unvalid
+    

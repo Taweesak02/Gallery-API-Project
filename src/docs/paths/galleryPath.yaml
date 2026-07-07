@@ -17,25 +17,24 @@
         schema:
           type: integer
           default: 1
-      - name: create_date
+      - name: create_at
         in: query
-        description: Artwork create by create_date
+        description: Artwork date created
         schema:
           type: date
-          default: "2026-06-21"
+          default: 2026-07-06T04:18:07.963Z
     responses:
       200:
-        description: Get artwork success
+        description: Success
+        content:
+          application/json:
+            $ref: '#/components/schemas/GalleryGetSuccessResponse'
+      500:
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/getArtworkResponses/success'
-      500:
-        description: Get artwork failed
-        content:
-          application/json:
-            schema: 
-              $ref: '#/components/schemas/getArtworkResponses/failed_500'
+              $ref: '#/components/schemas/GalleryGetErrorResponse'
 
 /v1/gallery/{artworkId}:
   get:
@@ -52,17 +51,16 @@
           type: integer
     responses:
       200:
-        description: Get Artwork success
+        description: Success
+        content:
+          application/json:
+            $ref: '#/components/schemas/GalleryGetByIdSuccessResponse'
+      500:
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/getArtworkResponses/success'
-      500:
-        description: Get Artwork failed
-        content:
-          application/json:
-            schema: 
-              $ref: '#/components/schemas/getArtworkResponses/failed_500'
+              $ref: '#/components/schemas/GalleryGetByIdErrorResponse'
 
 /v1/gallery/add:
   post:
@@ -74,43 +72,36 @@
       content:
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/addArtworkRequest'
+            $ref: '#/components/schemas/AddArtworkRequest'
     responses:
       201:
-        description: Add artwork success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/addArtworkResponses/success'
+              $ref: '#/components/schemas/GalleryAddSuccessResponse'
       400:
-        description: Image file is require
+        description: Bad Request
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/addArtworkResponses/failed_400'
+            schema:
+              $ref: '#/components/schemas/GalleryAddNoTokenResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+            $ref: '#/components/schemas/GalleryAddUnvalidTokenResponse'
       404:
-        description: Artist not found
+        description: Not Found
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/addArtworkResponses/failed_404'
+            $ref: '#/components/schemas/GalleryAddNotFoundResponse'
       500:
-        description: Add artwork failed
+        description: Error
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/addArtworkResponses/failed_500'
+            schema:
+              $ref: '#/components/schemas/GalleryAddErrorResponse'
 
 /v1/gallery/edit/{artworkId}:
   patch:
@@ -129,37 +120,41 @@
       content:
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/editArtworkRequest'
+            $ref: '#/components/schemas/EditArtworkRequest'
     responses:
       200:
-        description: Edit artwork success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/editArtworkResponses/success'
+              $ref: '#/components/schemas/GalleryEditSuccessResponse'
       400:
-        description: No data to edit
+        description: Bad Request
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/editArtworkResponses/failed_400'
+            schema:
+              $ref: '#/components/schemas/GalleryEditNoTokenResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Edit artwork failed
+            $ref: '#/components/schemas/GalleryEditUnvalidTokenResponse'
+      404:
+        description: Not Found
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/editArtworkResponses/failed_500'
+            $ref: '#/components/schemas/GalleryEditNotFoundResponse'
+      403:
+        description: Forbidden
+        content:
+          application/json:
+            $ref: '#/components/schemas/GalleryEditForbiddenResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GalleryEditErrorResponse'
 
 /v1/gallery/remove/{artworkId}:
   delete:
@@ -175,25 +170,35 @@
           type: integer
     responses:
       200:
-        description: Remove success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/removeArtworkResponses/success'
+              $ref: '#/components/schemas/GalleryDeleteSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GalleryDeleteNoTokenResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Remove failed
+            $ref: '#/components/schemas/GalleryDeleteUnvalidTokenResponse'
+      404:
+        description: Not Found
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/removeArtworkResponses/failed_500'
+            $ref: '#/components/schemas/GalleryDeleteNotFoundResponse'
+      403:
+        description: Forbidden
+        content:
+          application/json:
+            $ref: '#/components/schemas/GalleryDeleteForbiddenResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GalleryDeleteErrorResponse'

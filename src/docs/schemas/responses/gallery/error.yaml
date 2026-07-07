@@ -1,0 +1,41 @@
+components:
+  schemas:
+    GalleryGetErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/gallery/
+            message: Error message
+
+    GalleryGetByIdErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/gallery/{artworkId}
+            message: Error message
+
+    GalleryAddErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/gallery/add
+            message: Error message
+
+    GalleryEditErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/gallery/edit/{artworkId}
+            message: Error message
+    
+    GalleryDeleteErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/gallery/remove/{artworkId}
+            message: Error message

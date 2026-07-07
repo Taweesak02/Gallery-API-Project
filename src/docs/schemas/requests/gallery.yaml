@@ -1,8 +1,8 @@
 components:
   schemas:
-    addArtworkRequest:
+    AddArtworkRequest:
       type: object
-      required: []
+      required: [image]
       properties:
         title:
           type: string
@@ -11,7 +11,7 @@ components:
             type: string
             format: binary
     
-    editArtworkRequest:
+    EditArtworkRequest:
       type: object
       required: []
       properties:

@@ -114,11 +114,13 @@ http://localhost:3000/docs
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/v1/artist` | ดึงรายการศิลปินทั้งหมด | ❌ |
+| `GET` | `/v1/artist` | ดึงข้อมูลศิลปินจากข้อมูล | ❌ |
 | `GET` | `/v1/artist/:artistId` | ดึงข้อมูลศิลปินตาม ID | ❌ |
 | `POST` | `/v1/artist/register` | สมัครเป็นศิลปินใหม่ | ✅ |
-| `PATCH` | `/v1/artist/update/:artistId` | แก้ไขข้อมูลศิลปิน | ✅ |
-| `DELETE` | `/v1/artist/delete` | ลบศิลปิน | ✅ |
+| `DELETE` | `/v1/artist/delete` | ลบศิลปินตนเอง | ✅ |
+| `DELETE` | `/v1/artist/delete/:artistId` | ลบศิลปินตาม ID | ✅ |
+| `PATCH` | `/v1/artist/update` | แก้ไขข้อมูลศิลปินตนเอง | ✅ |
+| `PATCH` | `/v1/artist/update/:artistId` | แก้ไขข้อมูลศิลปินตาม ID | ✅ |
 
 ### Gallery
 
@@ -153,14 +155,17 @@ Gallery-API-Project/
 │   │   └── initdb.js           # Database initialisation / migrations
 │   ├── docs/                   # Swagger doc fragments
 │   │   ├── paths/
-│   │   ├── responses/
 │   │   └── schemas/
-│   ├── errors/
-│   │   └── errorHandle.js      # Centralised error handler
+│   │       ├── requests/
+│   │       └── responses/
 │   ├── middlewares/
+│   │   ├── asyncHandler.js       # Async Function handler
+│   │   ├── errorHandler.js      # Centralised error handler
 │   │   └── tokenCheck.js       # JWT verification middleware
 │   ├── models/
-│   │   └── userResponse.js     # Response shape definitions
+│   │   ├── artistResponse.js     # Base Artist Response
+│   │   ├── galleryResponse.js     # Base Gallery Response 
+│   │   └── userResponse.js     # Base User Response
 │   ├── repository/
 │   │   ├── artistRepo.js
 │   │   ├── blackListTokenRepo.js
@@ -170,12 +175,16 @@ Gallery-API-Project/
 │   │   ├── artistRoute.js
 │   │   ├── authRoute.js
 │   │   └── galleryRoute.js
-│   └── services/
-│       ├── artistService.js
-│       ├── authService.js
-│       ├── galleryService.js
-│       ├── imageService.js
-│       └── jwtService.js
+│   ├── services/
+│   │   ├── artistService.js
+│   │   ├── authService.js
+│   │   ├── galleryService.js
+│   │   ├── imageService.js
+│   │   └── jwtService.js
+│   └── utils/
+│       ├── appError.js    # Error Throw Function
+│       ├── responseHandler.js   # Response Function handler
+│       └── setCookie.js      # Set Cookie Function
 ├── .env.example
 ├── .gitignore
 ├── .dockerignore

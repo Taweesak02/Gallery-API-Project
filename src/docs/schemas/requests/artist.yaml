@@ -1,17 +1,26 @@
 components:
   schemas:
-    registerArtistRequest:
+    ArtistRegisterRequest:
       type: object
-      required: []
+      required: [name]
       properties:
         name:
           type: string
-          example: name
+          example: pencil
+        sex:
+          type: string
+          example: male
+        birth_date:
+          type: string
+          example: male
+        nationality:
+          type: string
+          example: 1:1:2000
         image:
           type: string
           format: binary
 
-    updateArtistRequest:
+    ArtistUpdateRequest:
       type: object
       required: []
       properties:
@@ -30,5 +39,4 @@ components:
         image:
             type: string
             format: binary
-
 

@@ -12,6 +12,8 @@ app.delete('/delete/:artistId',authCheck.accessTokenCheck,artistController.delet
 
 app.patch('/update',authCheck.accessTokenCheck,upload.single('image'),artistController.updateArtist)
 
+app.patch('/update/:artistId',authCheck.accessTokenCheck,upload.single('image'),artistController.updateArtistById)
+
 app.get('/',artistController.getProfile)
 
 app.get('/:artistId',artistController.getProfileById)

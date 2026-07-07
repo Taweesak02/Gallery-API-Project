@@ -1,3 +1,94 @@
+/v1/artist/:
+  get:
+    tags: [Artist]
+    summary: Get Artist
+    security: []
+    description: Get Artist Data By query from Database
+    parameters:
+      - name: userId
+        in: query
+        description: UserId of Artist
+        schema:
+          type: integer
+          default: 1
+      - name: name
+        in: query
+        description: Artist name
+        schema:
+          type: string
+          default: artist name
+      - name: sex
+        in: query
+        description: Artist sex
+        schema:
+          type: string
+          default: male
+      - name: sex
+        in: query
+        description: Artist sex
+        schema:
+          type: string
+          default: male
+      - name: birthdate
+        in: query
+        description: Artist birthdate
+        schema:
+          type: date
+          default: 2026-07-06T04:18:07.963Z
+      - name: nationality
+        in: query
+        description: Artist nationality
+        schema:
+          type: string
+          default: thai
+    responses:
+      200:
+        description: Success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistGetSuccessResponse'
+
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistGetErrorResponse'
+
+/v1/artist/{artistId}:
+  get:
+    tags: [Artist]
+    summary: Get Artist By Id
+    description: Get Artist Data By Id
+    security: []
+    parameters:
+      - name: artistId
+        in: path
+        required: true
+        description: Search artist data by artistId
+        schema:
+          type: integer
+    responses:
+      200:
+        description: Success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistGetByIdSuccessResponse'
+      404:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistGetByIdNotFoundResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistGetByIdErrorResponse'
+
 /v1/artist/register:
   post:
     tags: [Artist]
@@ -8,38 +99,36 @@
       content:
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/registerArtistRequest'
+            $ref: '#/components/schemas/ArtistRegisterRequest'
     responses:
       201:
-        description: Register success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/registerArtistResponses/success'
+              $ref: '#/components/schemas/ArtistRegisterSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            $ref: '#/components/schemas/ArtistRegisterInvalidInputResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+            $ref: '#/components/schemas/ArtistRegisterInvalidAuthenticationResponse'
       409:
-        description: User already have artist account
+        description: Conflict
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/registerArtistResponses/failed_409'
-
+            schema:
+              $ref: '#/components/schemas/ArtistRegisterDuplicateResponse'
       500:
-        description: Register failed
+        description: Error
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/registerArtistResponses/failed_500'
+            schema:
+              $ref: '#/components/schemas/ArtistRegisterErrorResponse'
 
 /v1/artist/delete:
   delete:
@@ -48,28 +137,33 @@
     description: Delete artist from Database
     responses:
       200:
-        description: Delete success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteArtistResponses/success'
+              $ref: '#/components/schemas/ArtistDeleteSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDeleteInvalidInputResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Delete failed
+            $ref: '#/components/schemas/ArtistDeleteInvalidAuthenticationResponse'
+      404:
+        description: Not Found
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/deleteArtistResponses/failed_500'
+            $ref: '#/components/schemas/ArtistDeleteNotFoundResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDeleteErrorResponse'
 
 /v1/artist/delete/{artistId}:
   delete:
@@ -85,28 +179,38 @@
           type: integer
     responses:
       200:
-        description: Delete success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteArtistResponses/success'
+              $ref: '#/components/schemas/ArtistDeleteByIdSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDeleteByIdInvalidInputResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Delete failed
+            $ref: '#/components/schemas/ArtistDeleteByIdInvalidAuthenticationResponse'
+      403:
+        description: Forbidden
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/deleteArtistResponses/failed_500'
+            $ref: '#/components/schemas/ArtistDeleteByIdForbiddenResponse'
+      404:
+        description: Not Found
+        content:
+          application/json:
+            $ref: '#/components/schemas/ArtistDeleteByIdNotFoundResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDeleteByIdErrorResponse'
 
 /v1/artist/update:
   patch:
@@ -118,31 +222,36 @@
       content:
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/updateArtistRequest'
+            $ref: '#/components/schemas/ArtistUpdateRequest'
     responses:
       200:
-        description: Patch success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateArtistResponses/success'
+              $ref: '#/components/schemas/ArtistUpdateSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistUpdateInvalidInputResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Patch failed
+            $ref: '#/components/schemas/ArtistUpdateInvalidAuthenticationResponse'
+      404:
+        description: Not Found
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/updateArtistResponses/failed_500'
+            $ref: '#/components/schemas/ArtistUpdateNotFoundResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistUpdateErrorResponse'
 
 /v1/artist/update/{artistId}:
   patch:
@@ -161,29 +270,39 @@
       content:
         multipart/form-data:
           schema:
-            $ref: '#/components/schemas/updateArtistRequest'
+            $ref: '#/components/schemas/ArtistUpdateRequest'
     responses:
       200:
-        description: Patch success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateArtistResponses/success'
+              $ref: '#/components/schemas/ArtistUpdateByIdSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistUpdateByIdInvalidInputResponse'
       401:
         description: Unauthorized
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Patch failed.
+            $ref: '#/components/schemas/ArtistUpdateByIdInvalidAuthenticationResponse'
+      403:
+        description: Forbidden
         content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/updateArtistResponses/failed_500'
+            $ref: '#/components/schemas/ArtistUpdateByIdForbiddenResponse'
+      404:
+        description: Not Found
+        content:
+          application/json:
+            $ref: '#/components/schemas/ArtistUpdateByIdNotFoundResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistUpdateByIdErrorResponse'
 

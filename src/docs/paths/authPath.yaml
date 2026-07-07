@@ -2,88 +2,76 @@
   post:
     tags: [Authentication]
     summary: Login User
-    description: Login user from Database
+    description: Login user
     security: []
     requestBody:
       required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/loginRequest'
+            $ref: '#/components/schemas/LoginRequest'
     responses:
       200:
-        description: Login success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/loginResponses/success'
-      400:
-        description: Missing field input
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/loginResponses/failed_400'
-      401:
-        description: Invalid email or password
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/loginResponses/failed_401'
-      500:
-        description: Login failed
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/loginResponses/failed_500'
-
-/v1/auth/register:
-  post:
-    tags: [Authentication]
-    summary: Register User
-    description: Register new user to Database
-    security: []
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/registerRequest'
-    responses:
-      201:
-        description: Register success
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/registerResponses/success'
+              $ref: '#/components/schemas/LoginSuccessResponse'
       400:
         description: Bad Request
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/registerResponses/failed_400'
-            examples:
-              missingInput:
-                value:
-                 
-                  message: Register failed
-                  error: Missing fields input ...
-              passwordNotMatching:
-                value:
-                  message: Register failed
-                  error: Password and confirmPassword do not matching
-     
-      409:
-        description: User already exist
+              $ref: '#/components/schemas/LoginMissingInputResponse'
+      401:
+        description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/registerResponses/failed_409'
+              $ref: '#/components/schemas/LoginInvalidAuthenticationResponse'
       500:
-        description: Register failed
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/registerResponses/failed_500'
+              $ref: '#/components/schemas/LoginErrorResponse'
+
+/v1/auth/register:
+  post:
+    tags: [Authentication]
+    summary: Register User
+    description: Register user
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegisterRequest'
+    responses:
+      201:
+        description: Success
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            $ref: '#/components/schemas/RegisterInvalidInputResponse'
+      409:
+        description: Conflict
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDuplicateResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterErrorResponse'
 
 /v1/auth/refresh:
   post:
@@ -93,28 +81,29 @@
     security: []
     responses:
       200:
-        description: Refresh success
+        description:  Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/refreshResponses/success'
+              $ref: '#/components/schemas/RefreshSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noRefreshToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidRefreshToken:
-                $ref: '#/components/schemas/tokenCheckResponses/refreshTokenUnvalid'
+              $ref: '#/components/schemas/RefreshUnvalidTokenResponse'
       500:
-        description: Refresh failed
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/refreshResponses/failed_500'
+              $ref: '#/components/schemas/RefreshErrorResponse'
 
 /v1/auth/logout:
   post:
@@ -123,28 +112,29 @@
     description: Logout User deactive lastest refresh token
     responses:
       200:
-        description: Logout success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/logoutResponses/success'
+              $ref: '#/components/schemas/LogoutSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+              $ref: '#/components/schemas/LogoutUnvalidTokenResponse'
       500:
-        description: Logout failed
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/logoutResponses/failed_500'
+              $ref: '#/components/schemas/LogoutErrorResponse'
 
 /v1/auth/delete:
   delete:
@@ -153,28 +143,29 @@
     description: Delete user from database
     responses:
       200:
-        description: Delete success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteResponses/success'
+              $ref: '#/components/schemas/DeleteSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+              $ref: '#/components/schemas/DeleteUnvalidTokenResponse'
       500:
-        description: Delete failed
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteResponses/failed_500'
+              $ref: '#/components/schemas/DeleteErrorResponse'
     
 /v1/auth/delete/{userId}:
   delete:
@@ -190,28 +181,41 @@
           type: integer
     responses:
       200:
-        description: Delete success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteResponses/success'
+              $ref: '#/components/schemas/DeleteByIdSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteByIdNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Delete failed
+              $ref: '#/components/schemas/DeleteByIdUnvalidTokenResponse'
+      403:
+        description: Forbidden
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/deleteResponses/failed_500'
+              $ref: '#/components/schemas/DeleteByIdUnvalidTokenResponse'
+      404:
+        description:  Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteByIdNotFoundResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteByIdErrorResponse'
     
 /v1/auth/getme:
   get:
@@ -220,28 +224,29 @@
     description: Get Current User
     responses:
       200:
-        description: Getme success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/getmeResponses/success'
+              $ref: '#/components/schemas/GetmeSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetmeNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
+              $ref: '#/components/schemas/GetmeUnvalidTokenResponse'
       500:
-        description: Getme failed
+        description: Error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/getmeResponses/failed_500'
+              $ref: '#/components/schemas/GetmeErrorResponse'
 
 /v1/auth/update:
   patch:
@@ -253,31 +258,39 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/updateRequest'
+            $ref: '#/components/schemas/UpdateRequest'
     responses:
       200:
-        description: Update success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateResponses/success'
+              $ref: '#/components/schemas/UpdateSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Update failed
+              $ref: '#/components/schemas/UpdateUnvalidTokenResponse'
+
+      409:
+        description: Conflict
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateResponses/failed_500'
+              $ref: '#/components/schemas/UpdateDuplicateResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateErrorResponse'
 
 /v1/auth/update/{userId}:
   patch:
@@ -296,28 +309,48 @@
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/updateRequest'
+            $ref: '#/components/schemas/UpdateRequest'
     responses:
       200:
-        description: Update success
+        description: Success
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateResponses/success'
+              $ref: '#/components/schemas/UpdateByIdSuccessResponse'
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateByIdNoTokenResponse'           
       401:
         description: Unauthorized
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/tokenCheckResponses/schema'
-            examples:
-              noAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/noToken'
-              invalidAccessToken:
-                $ref: '#/components/schemas/tokenCheckResponses/accessTokenUnvalid'
-      500:
-        description: Update failed
+              $ref: '#/components/schemas/UpdateByIdUnvalidTokenResponse'
+      403:
+        description: Forbidden
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateResponses/failed_500'
+              $ref: '#/components/schemas/UpdateByIdForbiddenResponse'
+      404:
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateByIdNotFoundResponse'
+      
+      409:
+        description: Conflict
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateByIdDuplicateResponse'
+      500:
+        description: Error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateByIdErrorResponse'

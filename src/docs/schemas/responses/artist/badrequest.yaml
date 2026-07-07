@@ -1,0 +1,49 @@
+components:
+  schemas:
+    ArtistRegisterInvalidInputResponse:
+      schema:
+        $ref: '#/components/schemas/BaseResponse'
+      examples:
+        MissingInput:
+          value:
+            status: 400
+            path: v1/artist/register
+            message: Missing fields input ... 
+        NoToken:
+          value:
+            status: 400
+            path: v1/artist/register
+            message: Token is required
+
+    ArtistDeleteInvalidInputResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/artist/delete
+            message: Token is required
+    
+    ArtistDeleteByIdInvalidInputResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/artist/delete/{artistId}
+            message: Token is required
+
+    ArtistUpdateInvalidInputResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/artist/update/
+            message: Token is required
+    
+    ArtistUpdateByIdInvalidInputResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 400
+            path: v1/artist/update/{artistId}
+            message: Token is required
+

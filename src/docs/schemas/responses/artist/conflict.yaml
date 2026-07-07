@@ -1,0 +1,9 @@
+components:
+  schemas:
+    ArtistRegisterDuplicateResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 409
+            path: v1/artist/register
+            message: There are already have this artist

@@ -1,0 +1,25 @@
+components:
+  schemas:
+    GalleryAddNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/gallery/add
+            message: There are no this artist
+
+    GalleryEditNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/gallery/edit/{artworkId}
+            message: Artwork not found
+
+    GalleryDeleteNotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 404
+            path: v1/gallery/remove/{artworkId}
+            message: Artwork not found

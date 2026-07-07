@@ -1,0 +1,74 @@
+components:
+  schemas:
+    LoginErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/login
+            message: Error message         
+    
+    RegisterErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/register
+            message: Error message
+    
+    RefreshErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/refresh
+            message: Error message
+    
+    LogoutErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/logout
+            message: Error message
+
+    DeleteErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/delete
+            message: Error message
+    
+    DeleteByIdErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/delete/{userId}
+            message: Error message
+    
+    GetmeErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/getme
+            message: Error message
+    
+    UpdateErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/update
+            message: Error message
+
+    UpdateByIdErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - example:
+            status: 500
+            path: v1/auth/update/{userId}
+            message: Error message
+    
